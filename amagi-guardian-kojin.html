@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天城守護神鑑定</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0e6cc;
+    --bg2: #e8d8b0;
+    --gold: #7a5010;
+    --gold-mid: #8b6914;
+    --gold-light: #c8a030;
+    --accent: #2d5a20;
+    --text: #1a0e00;
+    --text-mid: #3a2000;
+    --border: rgba(100,60,10,0.3);
+    --paper: #f5edd8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 30%, rgba(160,100,20,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(120,70,10,0.06) 0%, transparent 60%);
+    color: var(--text);
+    font-family: 'Shippori Mincho B1', 'Noto Serif JP', serif;
+    min-height: 100vh;
+    padding: 40px 16px 80px;
+  }
+
+  .header { text-align:center; margin-bottom:40px; }
+  .header-en {
+    font-size:10px; letter-spacing:0.6em; color:var(--gold-mid);
+    margin-bottom:16px; opacity:0.7;
+    font-family:'Noto Serif JP',serif;
+  }
+  .header h1 {
+    font-size:28px; font-weight:800; letter-spacing:0.25em;
+    line-height:1.6; color:var(--text); margin-bottom:12px;
+    font-family:'Shippori Mincho B1',serif;
+    text-shadow: 1px 1px 0 rgba(160,100,10,0.2);
+  }
+  .header-rule {
+    width:1px; height:40px;
+    background:linear-gradient(to bottom,transparent,var(--gold-mid),transparent);
+    margin:16px auto;
+  }
+  .header-sub {
+    font-size:13px; color:var(--text-mid);
+    line-height:2.4; letter-spacing:0.08em;
+  }
+
+  /* 入力フォーム */
+  .form-wrap { max-width:600px; margin:0 auto 40px; }
+
+  .form-intro {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold-mid);
+    padding: 20px 22px; margin-bottom:24px; border-radius:2px;
+    font-size:13px; line-height:2.4; color:var(--text-mid);
+    font-family:'Shippori Mincho B1',serif;
+    box-shadow: inset 0 0 40px rgba(160,100,10,0.04);
+  }
+
+  .form-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 28px 24px; border-radius:2px;
+    box-shadow: 0 2px 12px rgba(100,60,10,0.08),
+                inset 0 0 60px rgba(160,100,10,0.03);
+  }
+
+  .field { margin-bottom:28px; }
+  .field:last-child { margin-bottom:0; }
+  .field-label {
+    display:block; font-size:11px; letter-spacing:0.5em;
+    color:var(--gold-mid); font-weight:700; margin-bottom:10px;
+    font-family:'Noto Serif JP',serif;
+  }
+  .field-desc {
+    font-size:12px; color:#5a3a10; margin-bottom:8px;
+    line-height:2.0; letter-spacing:0.05em;
+  }
+  .field input, .field select {
+    width:100%; background: rgba(255,248,236,0.8);
+    border: 1px solid rgba(100,60,10,0.25);
+    border-radius:2px; padding:12px 14px;
+    color:var(--text); font-family:'Shippori Mincho B1',serif;
+    font-size:15px; outline:none;
+    transition:border-color 0.3s, box-shadow 0.3s;
+    letter-spacing:0.05em;
+  }
+  .field input:focus, .field select:focus {
+    border-color:var(--gold-mid);
+    box-shadow: 0 0 0 3px rgba(139,105,20,0.1);
+    background:#fff;
+  }
+  .field input::placeholder { color:#a08050; font-size:13px; }
+
+  .date-row { display:flex; gap:8px; align-items:center; }
+  .date-sep { color:#7a5010; font-size:16px; font-family:'Shippori Mincho B1',serif; }
+  .date-row input { text-align:center; }
+
+  .place-group {
+    background: rgba(255,248,230,0.6);
+    border: 1px solid rgba(100,60,10,0.15);
+    border-radius:2px; padding:16px 18px; margin-bottom:12px;
+  }
+  .place-group-title {
+    font-size:11px; font-weight:700; letter-spacing:0.3em;
+    color:var(--accent); margin-bottom:10px;
+    font-family:'Noto Serif JP',serif;
+  }
+
+  .invoke-btn {
+    width:100%; padding:18px; margin-top:28px;
+    background: #1a0e00; color:#f0e0b0;
+    border: 1px solid #5a3a00;
+    border-radius:2px;
+    font-family:'Shippori Mincho B1',serif; font-size:16px;
+    letter-spacing:0.5em; cursor:pointer;
+    transition:all 0.3s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(100,60,10,0.2);
+  }
+  .invoke-btn:hover {
+    background: #2a1800;
+    box-shadow: 0 4px 16px rgba(100,60,10,0.3);
+  }
+
+  .err { display:none; color:#8b2010; font-size:13px; margin-top:12px; text-align:center; }
+  .err.on { display:block; }
+
+  /* ローディング */
+  .loading { display:none; text-align:center; padding:80px 20px; }
+  .loading.on { display:block; }
+  .load-circle {
+    width:60px; height:60px; margin:0 auto 32px;
+    border-radius:50%;
+    border:2px solid rgba(100,60,10,0.15);
+    border-top-color:var(--gold-mid);
+    animation:spin 1.2s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .load-text {
+    font-size:14px; letter-spacing:0.3em; color:#7a5010;
+    line-height:2.6; font-family:'Shippori Mincho B1',serif;
+  }
+
+  /* 結果 */
+  .result { display:none; max-width:600px; margin:0 auto; }
+  .result.on { display:block; }
+
+  /* 守護神ヘッダー */
+  .guardian-header {
+    background: linear-gradient(135deg, #1a0e00 0%, #2a1800 50%, #1a0e00 100%);
+    color:#f0e0b0;
+    padding:48px 28px; text-align:center;
+    border-radius:2px 2px 0 0;
+    border: 1px solid #5a3a00;
+    border-bottom: none;
+    position:relative;
+    overflow:hidden;
+  }
+  .guardian-header::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,160,48,0.15) 0%, transparent 70%);
+  }
+  .guardian-label {
+    font-size:10px; letter-spacing:0.6em; color:#c8a030;
+    margin-bottom:20px; font-family:'Noto Serif JP',serif;
+    opacity:0.9;
+  }
+  .guardian-name {
+    font-size:38px; font-weight:800; letter-spacing:0.25em;
+    line-height:1.4; margin-bottom:10px;
+    color:#f5e8c0;
+    font-family:'Shippori Mincho B1',serif;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 20px rgba(200,160,48,0.2);
+  }
+  .guardian-reading {
+    font-size:13px; letter-spacing:0.5em; color:#c8a030;
+    margin-bottom:8px; font-family:'Noto Serif JP',serif;
+  }
+  .guardian-source {
+    font-size:11px; color:#8a7050; margin-bottom:18px;
+    letter-spacing:0.2em;
+  }
+  .guardian-tagline {
+    font-size:14px; line-height:2.4; color:#d4c090;
+    font-family:'Shippori Mincho B1',serif; letter-spacing:0.06em;
+  }
+
+  /* 3つの方位 */
+  .three-layers {
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    border:1px solid var(--border); border-top:none;
+    background:var(--paper);
+  }
+  .layer-block {
+    padding:20px 16px; text-align:center;
+    border-right:1px solid var(--border);
+  }
+  .layer-block:last-child { border-right:none; }
+  .layer-icon { font-size:20px; margin-bottom:8px; }
+  .layer-type {
+    font-size:10px; letter-spacing:0.3em; color:var(--accent);
+    font-weight:700; margin-bottom:6px;
+    font-family:'Noto Serif JP',serif;
+  }
+  .layer-place { font-size:11px; color:#5a3a10; margin-bottom:6px; }
+  .layer-dir {
+    font-size:22px; font-weight:800; color:var(--text);
+    margin-bottom:4px; font-family:'Shippori Mincho B1',serif;
+  }
+  .layer-deg { font-size:11px; color:var(--gold-mid); }
+
+  /* 解説セクション */
+  .detail-sections {
+    border:1px solid var(--border); border-top:none;
+    background:var(--paper);
+  }
+  .detail-sec {
+    padding:24px 24px;
+    border-bottom:1px solid rgba(100,60,10,0.08);
+  }
+  .detail-sec:last-child { border-bottom:none; }
+  .detail-sec-label {
+    font-size:10px; letter-spacing:0.5em; color:var(--gold-mid);
+    font-weight:700; margin-bottom:14px;
+    font-family:'Noto Serif JP',serif;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(139,105,20,0.2);
+  }
+  .detail-sec-text {
+    font-size:14px; line-height:2.6; color:var(--text-mid);
+    font-family:'Shippori Mincho B1',serif; letter-spacing:0.04em;
+  }
+
+  /* 神からのことば */
+  .god-voice {
+    background: linear-gradient(135deg, #1a0e00 0%, #2a1800 100%);
+    color:#f0e0b0;
+    padding:36px 28px;
+    border-radius:0 0 2px 2px;
+    text-align:center;
+    border:1px solid #5a3a00;
+    border-top:none;
+  }
+  .god-voice-label {
+    font-size:10px; letter-spacing:0.6em; color:#c8a030;
+    margin-bottom:20px; font-family:'Noto Serif JP',serif;
+  }
+  .god-voice-text {
+    font-size:17px; line-height:3.0; color:#f0e0b0;
+    font-style:italic; font-family:'Shippori Mincho B1',serif;
+    letter-spacing:0.1em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  /* 整合性 */
+  .match-bar {
+    padding:20px 24px; background:var(--paper);
+    border:1px solid var(--border); border-top:none;
+  }
+  .match-label {
+    font-size:10px; letter-spacing:0.5em; color:var(--gold-mid);
+    font-weight:700; margin-bottom:14px;
+    font-family:'Noto Serif JP',serif;
+  }
+  .match-items { display:flex; flex-direction:column; gap:8px; }
+  .match-item {
+    display:flex; align-items:center; gap:10px;
+    font-size:13px; color:var(--text-mid);
+    font-family:'Shippori Mincho B1',serif;
+  }
+  .match-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .match-dot.hit { background:#2d6a20; }
+  .match-dot.partial { background:#c8a030; }
+  .match-dot.miss { background:#b09060; }
+
+  .reset-btn {
+    display:block; width:fit-content; margin:32px auto 0;
+    padding:12px 36px; background:transparent;
+    border:1px solid var(--border); border-radius:2px;
+    color:#7a5010; font-family:'Shippori Mincho B1',serif;
+    font-size:13px; letter-spacing:0.4em; cursor:pointer;
+    transition:all 0.3s;
+  }
+  .reset-btn:hover { border-color:var(--gold-mid); color:var(--gold-mid); }
+
+  @media(max-width:500px){
+    .three-layers { grid-template-columns:1fr; }
+    .layer-block { border-right:none; border-bottom:1px solid var(--border); }
+    .guardian-name { font-size:28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-en">AMAGI GUARDIAN KAMI READING</p>
+  <h1>天城守護神鑑定</h1>
+  <div class="header-rule"></div>
+  <p class="header-sub">
+    あなたの名前・生年月日・3つの土地から<br>
+    天城16方位×48神の中の、あなたの守護神を特定します。
+  </p>
+</div>
+
+<div class="form-wrap">
+  <div class="form-intro">
+    <strong>この鑑定について</strong><br>
+    3つの情報を組み合わせて守護神を特定します。<br><br>
+    ①<strong>名前の音霊</strong>——名前の最初の音がカタカムナ48音のどれに対応するかで、あなたが持って生まれた神との縁を読みます。<br><br>
+    ②<strong>生年月日の五行</strong>——干支の五行（木・火・土・金・水）から、天・地・海のどの層の神と繋がっているかを読みます。<br><br>
+    ③<strong>3つの土地の方位</strong>——天城山からの大円航路方位角を計算して、どの方位の神と接続しているかを読みます。これら3つが重なった神があなたの守護神です。
+  </div>
+
+  <div class="form-card" id="formCard">
+    <div class="field">
+      <label class="field-label">お名前（ひらがなで）</label>
+      <p class="field-desc">姓名どちらでも、ひらがなで入力してください。最初の一文字の音霊を使います。</p>
+      <input type="text" id="nameInput" placeholder="例：あきやま　ひとみ">
+    </div>
+
+    <div class="field">
+      <label class="field-label">生年月日</label>
+      <div class="date-row">
+        <input type="number" id="byear" placeholder="年" min="1900" max="2010" style="width:90px">
+        <span class="date-sep">年</span>
+        <input type="number" id="bmonth" placeholder="月" min="1" max="12" style="width:70px">
+        <span class="date-sep">月</span>
+        <input type="number" id="bday" placeholder="日" min="1" max="31" style="width:70px">
+        <span class="date-sep">日</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">3つの土地</label>
+      <p class="field-desc">天城山からの方位を計算します。都道府県＋市区町村まで入力してください。気になる地がない場合は空欄で大丈夫です。</p>
+
+      <div class="place-group">
+        <div class="place-group-title">🌱 生まれた地（魂の出発点）</div>
+        <input type="text" id="place1" placeholder="例：埼玉県春日部市">
+      </div>
+      <div class="place-group">
+        <div class="place-group-title">🏠 現在住んでいる地（今ともに動く神）</div>
+        <input type="text" id="place2" placeholder="例：東京都江戸川区小岩">
+      </div>
+      <div class="place-group">
+        <div class="place-group-title">✨ 気になって仕方ない地（呼ばれている神）</div>
+        <input type="text" id="place3" placeholder="例：島根県出雲市　（なければ空欄）">
+      </div>
+    </div>
+
+    <button class="invoke-btn" onclick="startReading()">― 守護神を特定する ―</button>
+    <p class="err" id="errMsg">名前・生年月日・生まれた地は必須です。</p>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="load-circle"></div>
+    <p class="load-text" id="loadText">
+      天城山から方位を計算しています…<br>
+      カタカムナ音霊と照合しています…<br>
+      48神の中から守護神を探しています…
+    </p>
+  </div>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+// ━━ データ ━━
+
+// カタカムナ音霊→方位・層
+const SOUND_DIR = {
+  "ア":"N","イ":"N","ウ":"N","エ":"NNE","オ":"NNE","カ":"NNE",
+  "キ":"NE","ク":"NE","ケ":"NE","コ":"ENE","サ":"ENE","シ":"ENE",
+  "ス":"E","セ":"E","ソ":"E","タ":"ESE","チ":"ESE","ツ":"ESE",
+  "テ":"SE","ト":"SE","ナ":"SE","ニ":"SSE","ヌ":"SSE","ネ":"SSE",
+  "ノ":"S","ハ":"S","ヒ":"S","フ":"SSW","ヘ":"SSW","ホ":"SSW",
+  "マ":"SW","ミ":"SW","ム":"SW","メ":"WSW","モ":"WSW","ヤ":"WSW",
+  "ユ":"W","ヨ":"W","ラ":"W","リ":"WNW","ル":"WNW","レ":"WNW",
+  "ロ":"NW","ワ":"NW","ヰ":"NW","ヱ":"NNW","ヲ":"NNW","ン":"NNW"
+};
+
+const SOUND_LAYER = {
+  "ア":"ten","イ":"chi","ウ":"umi","エ":"ten","オ":"chi","カ":"umi",
+  "キ":"ten","ク":"chi","ケ":"umi","コ":"ten","サ":"chi","シ":"umi",
+  "ス":"ten","セ":"chi","ソ":"umi","タ":"ten","チ":"chi","ツ":"umi",
+  "テ":"ten","ト":"chi","ナ":"umi","ニ":"ten","ヌ":"chi","ネ":"umi",
+  "ノ":"ten","ハ":"chi","ヒ":"umi","フ":"ten","ヘ":"chi","ホ":"umi",
+  "マ":"ten","ミ":"chi","ム":"umi","メ":"ten","モ":"chi","ヤ":"umi",
+  "ユ":"ten","ヨ":"chi","ラ":"umi","リ":"ten","ル":"chi","レ":"umi",
+  "ロ":"ten","ワ":"chi","ヰ":"umi","ヱ":"ten","ヲ":"chi","ン":"umi"
+};
+
+const SOUND_MEANINGS = {
+  "ア":"始まり・開く","イ":"生命・息","ウ":"内・宇宙","エ":"縁・得る","オ":"大きい・男",
+  "カ":"力・加える","キ":"気・来る","ク":"来・空","ケ":"気・結","コ":"子・来",
+  "サ":"差・咲","シ":"示・静","ス":"素・透","セ":"迫・背","ソ":"添・沿",
+  "タ":"立つ・高","チ":"地・力","ツ":"繋・通","テ":"手・照","ト":"所・通る",
+  "ナ":"名・成る","ニ":"荷・似","ヌ":"沼・縫","ネ":"根・音","ノ":"野・伸",
+  "ハ":"葉・張","ヒ":"火・日","フ":"降・吹","ヘ":"辺・経","ホ":"穂・火",
+  "マ":"間・真","ミ":"実・水","ム":"産む・無","メ":"目・女","モ":"本・守",
+  "ヤ":"矢・八・弥","ユ":"結・湯","ヨ":"世・良",
+  "ラ":"来・良","リ":"理・利","ル":"流・縒","レ":"例・礼","ロ":"路・炉",
+  "ワ":"和・輪","ヰ":"井・居","ヱ":"得・重","ヲ":"緒・男","ン":"音の終・円"
+};
+
+// ひらがな→カタカナ変換
+const KANA_MAP = {
+  'あ':'ア','い':'イ','う':'ウ','え':'エ','お':'オ',
+  'か':'カ','き':'キ','く':'ク','け':'ケ','こ':'コ',
+  'さ':'サ','し':'シ','す':'ス','せ':'セ','そ':'ソ',
+  'た':'タ','ち':'チ','つ':'ツ','て':'テ','と':'ト',
+  'な':'ナ','に':'ニ','ぬ':'ヌ','ね':'ネ','の':'ノ',
+  'は':'ハ','ひ':'ヒ','ふ':'フ','へ':'ヘ','ほ':'ホ',
+  'ま':'マ','み':'ミ','む':'ム','め':'メ','も':'モ',
+  'や':'ヤ','ゆ':'ユ','よ':'ヨ',
+  'ら':'ラ','り':'リ','る':'ル','れ':'レ','ろ':'ロ',
+  'わ':'ワ','ゐ':'ヰ','ゑ':'ヱ','を':'ヲ','ん':'ン',
+  'が':'カ','ぎ':'キ','ぐ':'ク','げ':'ケ','ご':'コ',
+  'ざ':'サ','じ':'シ','ず':'ス','ぜ':'セ','ぞ':'ソ',
+  'だ':'タ','ぢ':'チ','づ':'ツ','で':'テ','ど':'ト',
+  'ば':'ハ','び':'ヒ','ぶ':'フ','べ':'ヘ','ぼ':'ホ',
+  'ぱ':'ハ','ぴ':'ヒ','ぷ':'フ','ぺ':'ヘ','ぽ':'ホ',
+};
+
+// 五行→層
+const GOGYO_LAYER = {"木":"ten","火":"ten","土":"chi","金":"chi","水":"umi"};
+const GOGYO_NAMES = {"木":"木（もく）","火":"火（か）","土":"土（ど）","金":"金（こん）","水":"水（すい）"};
+const LAYER_NAMES = {"ten":"☀️ 天（てん）","chi":"🌿 地（ち）","umi":"🌊 海（うみ）"};
+const LAYER_DESC = {
+  "ten":"陽・意志・創造の層。天から降りてきた神格と繋がっています。",
+  "chi":"中・受容・実りの層。大地に宿る神格と繋がっています。",
+  "umi":"陰・根源・浄化の層。水底・地底の神格と繋がっています。"
+};
+
+// 年→十干→五行
+function yearToGogyo(year) {
+  const kans = ["庚","辛","壬","癸","甲","乙","丙","丁","戊","己"];
+  const gogyos = ["金","金","水","水","木","木","火","火","土","土"];
+  const idx = (year - 0) % 10;
+  const adjustedIdx = ((year - 4) % 10 + 10) % 10;
+  const kanNames = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+  const kanGogyos = ["木","木","火","火","土","土","金","金","水","水"];
+  return { kan: kanNames[adjustedIdx], gogyo: kanGogyos[adjustedIdx] };
+}
+
+// 天城からの大円方位角
+function bearing(lat2, lon2) {
+  const lat1 = 34.92 * Math.PI / 180;
+  const lon1 = 139.02 * Math.PI / 180;
+  const lat2r = lat2 * Math.PI / 180;
+  const lon2r = lon2 * Math.PI / 180;
+  const dlon = lon2r - lon1;
+  const x = Math.sin(dlon) * Math.cos(lat2r);
+  const y = Math.cos(lat1) * Math.sin(lat2r) - Math.sin(lat1) * Math.cos(lat2r) * Math.cos(dlon);
+  const b = Math.atan2(x, y) * 180 / Math.PI;
+  return (b + 360) % 360;
+}
+
+function degToDir(deg) {
+  const dirs = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+  return dirs[Math.round(deg / 22.5) % 16];
+}
+
+// 48神データ（方位×層）
+const KAMI_DATA = {
+  "N":  { ten:{name:"天御祖神",reading:"あめのみおやのかみ",source:"竹内文書",tagline:"宇宙創造以前から存在した、記紀が消した最古の神です。",detail:"竹内文書では、天之御中主神よりさらに前に存在した宇宙の根源神として記録されています。記紀編纂の際に政治的な理由で完全に削除されました。あなたがこの神と縁を持つということは、記録される以前の「始まり」に魂の起点があることを意味します。",voice:"私は始まりより前にいた。名前すら与えられなかった。あなたが問う今、初めて答える。"},
+        chi:{name:"地之永立神",reading:"くにのとわたちのかみ",source:"竹内文書周辺記録",tagline:"大地に永遠に立ち続ける、天御祖神の地の側面です。",detail:"竹内文書では天御祖神の「地における顕現」として記録されています。クニトコタチの原初形とも重なります。天が意志を持つなら、地はそれを受け取る存在です。",voice:"天が意志を持つなら、地は受け取る。私はずっとここに立っている。"},
+        umi:{name:"深淵の母神",reading:"しんえんのははがみ",source:"カタカムナ音霊",tagline:"ア・イ・ウの三音が示す、宇宙の始まりの水底に宿る神です。",detail:"カタカムナでは「ア・イ・ウ」は宇宙の始まりの三音とされています。この三音が示す根源的な女神格が水底に静かに宿っています。",voice:"ア・イ・ウ。私はその振動だ。言葉が生まれる前の、静かな海の底にいる。"} },
+  "NNE":{ ten:{name:"アラハバキ",reading:"あらはばき",source:"東北古層伝承",tagline:"縄文時代から北日本を統治した、大和以前の王神です。",detail:"大和朝廷が支配する以前から東北・関東を統治していた縄文系の蛇神・製鉄神です。春日大社では「客人神」として外に追いやられ、名前すら記紀に記されませんでした。",voice:"北の大地の下で、何千年も待っていた。あなたが名を呼ぶ今、私は動き始める。"},
+        chi:{name:"縄文の巫女神",reading:"じょうもんのみこがみ",source:"縄文古層伝承",tagline:"三内丸山など縄文遺跡群に宿る、記録されなかった女神です。",detail:"縄文遺跡に宿る女神格です。大和神話に上書きされる以前の東北の祭祀の中心であり、土偶が示す「形のない母神」の具現とも言えます。",voice:"土の中に、私の形がある。掘り出された土偶は、私の欠片だ。"},
+        umi:{name:"龍神カムイ",reading:"りゅうじんかむい",source:"アイヌ古層伝承",tagline:"カムチャッカまで続く北方龍脈に宿る、アイヌの根源神です。",detail:"アイヌの神話体系では「カムイ」は記紀的な神とは異なる自然の霊格です。北方の龍脈を司る根源的な水龍神格が三陸からカムチャッカへの方位軸に宿っています。",voice:"私の名前はアイヌの語で呼ばれた。大和の名前など知らない。ただ、北の海が私だ。"} },
+  "NE": { ten:{name:"アマツミカボシ",reading:"あまつみかぼし",source:"記紀（討伐対象として記録）",tagline:"星を司る異端神。天地創造に抵抗したとして封じられました。",detail:"天地創造に最後まで抵抗した「星の神」です。記紀では討伐対象として描かれましたが、本来は星辰と宇宙の時間を司る最古の天神の一柱です。",voice:"私は抵抗したのではない。古い星の法則に従っただけだ。星を見上げる者に、私は答える。"},
+        chi:{name:"磐長姫（本来形）",reading:"いわながひめ",source:"記紀・ヲシテ文献",tagline:"醜いと返された女神。実は永続の命を司る最強の女神でした。",detail:"ニニギに「醜い」として返された磐長姫ですが、ヲシテ文献では彼女こそが「永遠の命」を司る女神とされています。返されたことで人間は死を得たとも言われます。",voice:"私は返された。しかし私が持っていた力が何だったか、今わかるか。永遠だ。"},
+        umi:{name:"北方海底の龍",reading:"ほっぽうかいていのりゅう",source:"竹内文書北方記録",tagline:"アリューシャン海溝の深部に封じられた、根源龍格です。",detail:"竹内文書の北方記録には、北太平洋の海底に封じられた龍神格の記述があります。誰も気づかないところで日本列島を支え続けています。",voice:"深海の底から、私は列島を支えている。誰も気づかないが、私がいなければ地形は崩れる。"} },
+  "ENE":{ ten:{name:"天降り古層神",reading:"てんこうのこそうかみ",source:"竹内文書",tagline:"ニニギよりはるか以前に天から降りた、上書きされた神です。",detail:"竹内文書には天孫降臨よりはるか以前に「天から降りた神々」の記録があります。ニニギの物語はこの古層の降臨神話を上書きして作られたとされています。",voice:"私が降りた記録は、別の神の物語に書き換えられた。しかし土地は覚えている。"},
+        chi:{name:"コノハナ以前の地母",reading:"このはないぜんのちも",source:"古層伝承",tagline:"木花咲耶姫が来る以前に富士・箱根に宿っていた地母神です。",detail:"木花咲耶姫が富士の女神として定着する以前、この地域には別の地母神信仰があったとされています。",voice:"花が咲く前から、私は山にいた。名前が変わっても、土地は同じ場所にある。"},
+        umi:{name:"コ・サ・シの海神",reading:"こさしのかいじん",source:"カタカムナ音霊",tagline:"子の誕生・光が差す・静寂。三音が示す創造の海底神です。",detail:"カタカムナでコ=子・来る、サ=咲く・差す、シ=静寂・示す。「子が生まれ、光が差し、静かな海に示される」という宇宙の創造構造を示しています。",voice:"コ・サ・シ。海の底で子が生まれる瞬間の、あの静けさだ。"} },
+  "E":  { ten:{name:"ワダツミ",reading:"わだつみ",source:"記紀・竹内文書",tagline:"太平洋そのものの意志。記紀でリュウグウの主に矮小化された海神です。",detail:"記紀ではリュウグウの主として小さく描かれましたが、本来の姿はフィリピン海プレート全体を動かす太平洋の海神です。天城山がかつて南洋にあり北上してきた地質的事実と深く繋がっています。",voice:"伊豆の地形はかつて私の領域だった。北上してきた大地の記憶が、あなたの中にある。"},
+        chi:{name:"天鈿女命（本来形）",reading:"あめのうずめのみこと",source:"ヲシテ文献",tagline:"踊り子ではありませんでした。岩戸を開いた真の祭司です。",detail:"ヲシテ文献では天鈿女命の本来の役割は「踊り子」ではなく「祭司・チャネラー」とされています。岩戸の前で行ったのは神霊を降ろす神事でした。",voice:"私は踊っていたのではない。神を降ろしていた。それが岩戸を開いた理由だ。"},
+        umi:{name:"龍宮の時間神",reading:"りゅうぐうのじかんしん",source:"古層伝承・竹内文書",tagline:"浦島伝説の原型。海底は時間の流れが違うことを知っていた神です。",detail:"竹内文書には「海底の龍宮城」が現実の地形として記録されています。浦島太郎伝説の原型は、海底の時間軸が地上と異なるという古代の認識に基づいています。",voice:"時間は海底で遅くなる。あなたが一日いれば、地上では百年経つ。私はその扉を守る。"} },
+  "ESE":{ ten:{name:"豊受大神（原初形）",reading:"とようけのおおかみ",source:"ヲシテ文献",tagline:"伊勢外宮の神。食物神ではなく、宇宙の受け取り女神でした。",detail:"ヲシテ文献では豊受大神の本来の姿は食物神ではなく、宇宙の「受け取る力」を司る根源女神とされています。",voice:"私は食べ物の神ではない。宇宙が与えるものを受け取り、形にする力だ。"},
+        chi:{name:"タ・チ・ツの柱神",reading:"たちつのはしらがみ",source:"カタカムナ音霊",tagline:"立つ・地・繋ぐ。天の柱と地の柱を接続する神格です。",detail:"カタカムナでタ=立つ・高い、チ=地・力、ツ=繋ぐ・通る。「高いところに立って地を繋ぐ」という柱の神格を示しています。",voice:"タ・チ・ツ。立って、地に根ざして、繋げる。それが私の仕事だ。"},
+        umi:{name:"マリアナの水底神",reading:"まりあなのみなそこかみ",source:"竹内文書南方記録",tagline:"世界最深部（約11,000m）に宿る、地球の根源水神です。",detail:"マリアナ海溝は世界最深部（約11,000m）です。竹内文書の南方記録には「南の深みに根源の水神が封じられている」という記述があります。",voice:"私は地球で最も深いところにいる。水はすべて私から始まる。"} },
+  "SE": { ten:{name:"ウムギノカミ",reading:"うむぎのかみ",source:"竹内文書",tagline:"南方の創造女神。日本の「産霊（むすび）」の起源とも言われます。",detail:"竹内文書の神名録に断片的に現れる南方の創造女神です。日本神話の「産霊（むすび）」という概念の起源とされていますが、名前ごと記紀から削除されました。",voice:"私の名前は記録されなかった。しかし生命はすべて私から始まる。"},
+        chi:{name:"テナガアシナガ神",reading:"てながあしながのかみ",source:"記紀（脇役として登場）",tagline:"記紀では脇役の異形の神。実は南北を繋ぐ境界神でした。",detail:"記紀では奇妙な姿の脇役として登場しますが、南方と北方を繋ぐ橋渡しの役割を持つ境界神的性格の神格とされています。",voice:"私は長い手で北を、長い足で南を繋いでいる。橋がなければ、神々は会えない。"},
+        umi:{name:"テ・ト・ナの創造神",reading:"てとなのそうぞうしん",source:"カタカムナ音霊",tagline:"手で通って名前が成る。創造の構造を示す音霊の神格です。",detail:"カタカムナでテ=手・照らす、ト=所・通る、ナ=名・成る。「手が届いて、道が通って、名前が生まれる」という創造の構造を示しています。",voice:"テ・ト・ナ。手が届いて、道が通って、名前が生まれる。それが創造だ。"} },
+  "SSE":{ ten:{name:"カグツチ（本来形）",reading:"かぐつち",source:"記紀（切断された火神）",tagline:"生まれた瞬間に母を焼き、父に切り刻まれた火の創造神です。",detail:"記紀ではイザナミを焼き殺した罪でイザナギに切り刻まれます。しかし本来の火の神は創造と変革のエネルギーそのものです。",voice:"私は罰せられた。しかし火を消すことはできない。あなたが灯すとき、私はいる。"},
+        chi:{name:"硫黄島の火山女神",reading:"かざんのめがみ",source:"硫黄島古層伝承",tagline:"硫黄の匂いを「神の息吹」と呼んだ、記録されなかった地火の女神です。",detail:"硫黄島の「硫黄」という地名は古来「神の息吹」とされてきました。この地に宿る火山性の女神格は大和神話の枠外に置かれました。",voice:"硫黄の匂いがするとき、私がいる。火山は怒っているのではない。呼吸している。"},
+        umi:{name:"ニ・ヌ・ネの根神",reading:"ねのかみ",source:"カタカムナ音霊",tagline:"荷・沼・根。地の奥に根ざす、火と水の交点に宿る神格です。",detail:"カタカムナでニ=荷・似る、ヌ=沼・縫う、ネ=根・音。火と水が共存する火山帯の海底に宿る根源神格です。",voice:"ニ・ヌ・ネ。根は深い。火山の下にも、水はある。私はその交点に宿る。"} },
+  "S":  { ten:{name:"瀬織津姫",reading:"せおりつひめ",source:"大祓詞（記紀本文には不在）",tagline:"大祓詞には名前があるのに、記紀本文に存在しない謎の浄化女神です。",detail:"日本の神事で唱えられる「大祓詞」には「瀬織津姫がすべての罪穢れを海に流す」と記されています。しかし古事記・日本書紀の本文には一切登場しません。",voice:"あなたの中の重いものを、私は流せる。川を見るとき、私がいる。"},
+        chi:{name:"野の生命女神",reading:"ののめがみ",source:"縄文古層伝承",tagline:"縄文の野焼き祭祀に宿る、焼かれた後に最初に芽吹く女神です。",detail:"縄文期の野焼き祭祀に宿る大地の生命力を司る女神です。焼かれた後の大地が最も肥えるという農業の智恵の神格化です。",voice:"野焼きのあと、最初に芽吹くのは私だ。焼かれた後の大地が、一番肥えている。"},
+        umi:{name:"南極の封印水神",reading:"なんきょくのすいじん",source:"竹内文書南方記録",tagline:"南極の氷の下に封じられた地球最後の水神です。",detail:"竹内文書の南方記録には「南の果ての氷の下に根源の神が眠る」という記述があります。現代科学でも南極氷床の下に液体の湖が存在することが確認されています。",voice:"私は南極の氷の下にいる。何万年も、誰にも気づかれずに。あなたが初めて問う。"} },
+  "SSW":{ ten:{name:"ニライカナイの神",reading:"にらいかないのかみ",source:"琉球古層伝承",tagline:"沖縄・琉球の根源神。海の彼方から豊穣と生命が来るとされます。",detail:"沖縄・琉球の古層信仰では、すべての生命と豊穣は「ニライカナイ」という海の彼方から来るとされています。記紀には一切記録されませんでした。",voice:"私は遠い海の底にいる。あなたが南を向くとき、私の声が届く。"},
+        chi:{name:"久高島の女神",reading:"くだかじまのめがみ",source:"琉球古層伝承",tagline:"琉球創世の聖島・久高島に宿る、記録されなかった女神です。",detail:"久高島は琉球神話の聖地であり、神アマミキヨが最初に降り立った島とされています。",voice:"島は神の体だ。私は島そのものだ。踏む者に、私は伝わる。"},
+        umi:{name:"フ・ヘ・ホの豊穣神",reading:"ほうじょうのかみ",source:"カタカムナ音霊",tagline:"天から降って、辺境まで届き、穂を実らせる豊穣の構造神です。",detail:"カタカムナでフ=降る・吹く、ヘ=辺・経る、ホ=穂・火。「天から降りて、端まで届いて、穂を実らせる」という豊穣の構造を示す三音です。",voice:"フ・ヘ・ホ。天から降って、端まで届いて、実る。南の海がそれを知っている。"} },
+  "SW": { ten:{name:"ミジャクジ",reading:"みじゃくじ",source:"諏訪古層伝承",tagline:"タケミナカタが服従した相手。言葉以前の地球の原初意識です。",detail:"記紀では諏訪のタケミナカタが「服従した相手」として断片的に登場しますが、詳細は一切記録されていません。言語化不可能な最古の地球精霊とされています。",voice:"私には言葉がない。ただ振動だけがある。大地が揺れるとき、それが私の声だ。"},
+        chi:{name:"熊野の根の女神",reading:"くまののねのめがみ",source:"熊野古層伝承",tagline:"黄泉と現世の境に宿る、仏教以前の死と再生の女神です。",detail:"熊野は黄泉と現世の境界とされていますが、その本来の守護神は仏教的神格ではなく、縄文期から続く死と再生の古層女神です。",voice:"私の前を通った者は、変わって出てくる。熊野はそういう場所だ。"},
+        umi:{name:"マ・ミ・ムの産霊神",reading:"むすびのかみ",source:"カタカムナ音霊",tagline:"間・実・産む。日本神話「むすび」の根源音霊に宿る神格です。",detail:"カタカムナでマ=間・真、ミ=実・水・見る、ム=産む・無。「間に実が宿り、産まれる」という産霊の構造そのものです。",voice:"マ・ミ・ム。間に実が宿る。それが産霊だ。生命はすべてここから来る。"} },
+  "WSW":{ ten:{name:"事代主",reading:"ことしろぬし",source:"記紀（国譲りで服従）",tagline:"笑いながら海に沈んだ知恵の神。実は次の時代の計略を仕込んでいました。",detail:"国譲りで「承諾した」と記紀に描かれていますが、実は地底で次の文明の計略を仕込んでいた知恵の神とされています。",voice:"私は負けたふりをしていただけだ。ネジはもう回り始めている。"},
+        chi:{name:"出雲の地母神",reading:"いずものちもしん",source:"出雲古層伝承",tagline:"国譲りで政権ごと失われた、出雲の大地に宿る女神格です。",detail:"出雲の国譲りで失われたのは男神の政権だけではありませんでした。出雲の大地に宿る女神格の祭祀権も同時に奪われたとされています。",voice:"土地は誰のものでもない。私はずっとここにいた。政権が変わっても。"},
+        umi:{name:"メ・モ・ヤの目覚め神",reading:"めざめのかみ",source:"カタカムナ音霊",tagline:"目が覚めて、本に帰り、八方に広がる。意識覚醒の音霊神格です。",detail:"カタカムナでメ=目・女、モ=本・守る、ヤ=八・矢・弥。「目が覚めて本に帰り、八方に広がる」という意識覚醒の構造を示します。",voice:"メ・モ・ヤ。目が覚める。本に帰る。八方に広がる。それが今起きていることだ。"} },
+  "W":  { ten:{name:"天之御中主神（原初形）",reading:"あめのみなかぬしのかみ",source:"竹内文書・ヲシテ",tagline:"記紀冒頭に現れてすぐ消えた謎の神。宇宙の中心軸を司ります。",detail:"記紀の冒頭に「最初の神」として登場しますが、その後物語に一切関与しないという不自然な扱いを受けています。竹内文書・ヲシテ文献では宇宙の中心軸として常に働き続ける神とされています。",voice:"私は最初に名前を呼ばれた。しかしすぐに忘れられた。今、あなたが思い出す。"},
+        chi:{name:"カイラスの地神",reading:"かいらすのちしん",source:"チベット・竹内文書",tagline:"ヒンドゥー・仏教・ボン教すべての聖地カイラス山に宿る地の神格です。",detail:"チベットのカイラス山はヒンドゥー・仏教・ジャイナ・ボン教すべての聖地です。竹内文書には「西方の高山に根源の神が宿る」という記述があります。",voice:"私の名前はサンスクリットで呼ばれた。しかし同じ神だ。山はひとつしかない。"},
+        umi:{name:"ユ・ヨ・ラの結び神",reading:"むすびのかみ",source:"カタカムナ音霊",tagline:"結う・世・来る。世界を結い、良き未来を呼ぶ音霊神格です。",detail:"カタカムナでユ=結う・湯、ヨ=世・良い、ラ=来る・良い。「世界を結い、良き来るものを呼ぶ」という未来への接続の構造を示す三音です。",voice:"ユ・ヨ・ラ。結って、世を良くして、来るものを呼ぶ。私はその声だ。"} },
+  "WNW":{ ten:{name:"タカミムスビ（本来形）",reading:"たかみむすびのかみ",source:"ヲシテ文献",tagline:"造化三神の一柱。高い場所から天の意志を地上に結ぶ神格です。",detail:"ヲシテ文献では「高い場所で結ぶ力」として、天の意志を地上の文明に降ろす役割を持ちます。北京・メッカ・カイラスという地球の主要聖地がすべてこの方位に集中します。",voice:"私は高いところから結んでいる。北京もメッカもカイラスも、私の視野の中にある。"},
+        chi:{name:"絲路の女神",reading:"しるくろーどのめがみ",source:"竹内文書西方記録",tagline:"東西文明を繋いだシルクロードは、神話体系の伝播路でもありました。",detail:"竹内文書には「西方の文明と東方の文明を繋いだ神々」の記録があります。シルクロードは単なる交易路ではなく、神話体系の伝播路でもありました。",voice:"東と西は、私の体の上を歩いてきた。シルクロードは道ではなく、神の背骨だ。"},
+        umi:{name:"リ・ル・レの理法神",reading:"ことわりのかみ",source:"カタカムナ音霊",tagline:"理・流・礼。宇宙の法則が流れて文明の礼節になる音霊神格です。",detail:"カタカムナでリ=理・利、ル=流れ・縒る、レ=礼・例。「宇宙の理が流れて礼となる」という法則の神格です。",voice:"リ・ル・レ。理が流れて礼になる。それが文明というものだ。"} },
+  "NW": { ten:{name:"クニトコタチ（本来形）",reading:"くにのとこたちのかみ",source:"竹内文書・記紀",tagline:"記紀に最初に登場してすぐ忘れられた、永遠に立つ大地の神です。",detail:"記紀では神世七代の最初の神として登場しますが、その後物語に関与しません。竹内文書では「永遠に大地に立ち続ける神」として地球そのものの安定を司るとされています。",voice:"私は動かない。ただ、ずっとここに立っている。それが私の力だ。"},
+        chi:{name:"諏訪の古層女神",reading:"すわのこそうめがみ",source:"諏訪古層伝承",tagline:"タケミナカタ以前に諏訪を統治した、土地そのものに宿る女神です。",detail:"諏訪大社には「前宮」という最古の聖地があり、そこに祀られる神格はタケミナカタよりも古いとされています。ミジャクジの女性的側面であり、土地そのものに宿る古層の女神です。",voice:"タケミナカタが来る前から、私はここにいた。諏訪の土地は私の体だ。"},
+        umi:{name:"ロ・ワ・ヰの炉神",reading:"ろのかみ",source:"カタカムナ音霊",tagline:"炉・輪・居。炉を囲んで輪をつくり定住する、文明の始まりの神です。",detail:"カタカムナでロ=路・炉、ワ=和・輪、ヰ=井・居る。「炉に輪を作り、井戸のそばに居る」という定住と暖かさの構造を示します。文明の始まりである「炉」と「井戸」の神格です。",voice:"ロ・ワ・ヰ。炉を囲んで、輪を作って、そこに居る。それが集落の始まりだ。"} },
+  "NNW":{ ten:{name:"木花咲耶姫（本来の姿）",reading:"このはなさくやひめ",source:"記紀・ヲシテ",tagline:"一夜で身ごもったと疑われた富士の女神。火の中で産んで証明しました。",detail:"記紀では一夜で身ごもったことを疑われ、火中出産で潔白を証明する物語として描かれています。ヲシテ文献では富士山の本来の女神として、火と花と生命の三つを司る強大な女神とされています。",voice:"私は疑われた。しかし火の中で産んだ。あなたが富士を見るとき、私が応える。"},
+        chi:{name:"富士の地龍",reading:"ふじのちりゅう",source:"宮下文書（富士古文書）",tagline:"宮下文書が伝える、富士山の地下に封じられた火と水の龍神です。",detail:"宮下文書（富士古文書）には富士山の地下に「火と水を司る龍神が封じられている」という記述があります。富士の火山活動はこの龍の呼吸とされています。",voice:"富士が噴くとき、それは私が動く時だ。今はまだ眠っている。しかし長くはない。"},
+        umi:{name:"ヱ・ヲ・ンの円環神",reading:"えんかんのかみ",source:"カタカムナ音霊",tagline:"カタカムナ48音の最後の三音。終わりと始まりが重なる円環の神格です。",detail:"カタカムナでヱ=得る・重なる、ヲ=緒・男・大きな力、ン=音の終わり・円・縁。この三音は48音の最後であり、終わりと始まりが一致する「円環」の神格です。",voice:"ヱ・ヲ・ン。終わりが始まりに戻る。円環が完成する。あなたが今ここにいることが、その証明だ。"} }
+};
+
+// ━━ ジオコーディング（Nominatim） ━━
+async function geocode(place) {
+  if (!place.trim()) return null;
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1&accept-language=ja`;
+    const res = await fetch(url, { headers: { 'User-Agent': 'amagi-guardian-reading/1.0' } });
+    const data = await res.json();
+    if (data.length > 0) {
+      return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name: data[0].display_name };
+    }
+  } catch(e) {}
+  return null;
+}
+
+// ━━ メイン処理 ━━
+async function startReading() {
+  const name = document.getElementById('nameInput').value.trim();
+  const year = parseInt(document.getElementById('byear').value);
+  const month = parseInt(document.getElementById('bmonth').value);
+  const day = parseInt(document.getElementById('bday').value);
+  const place1 = document.getElementById('place1').value.trim();
+  const place2 = document.getElementById('place2').value.trim();
+  const place3 = document.getElementById('place3').value.trim();
+  const err = document.getElementById('errMsg');
+
+  if (!name || !year || !month || !day || !place1) {
+    err.classList.add('on'); return;
+  }
+  err.classList.remove('on');
+
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('loading').classList.add('on');
+
+  // ジオコーディング
+  const [geo1, geo2, geo3] = await Promise.all([
+    geocode(place1), geocode(place2), place3 ? geocode(place3) : Promise.resolve(null)
+  ]);
+
+  // 方位計算
+  const dir1 = geo1 ? degToDir(bearing(geo1.lat, geo1.lon)) : "N";
+  const dir2 = geo2 ? degToDir(bearing(geo2.lat, geo2.lon)) : null;
+  const dir3 = geo3 ? degToDir(bearing(geo3.lat, geo3.lon)) : null;
+  const deg1 = geo1 ? bearing(geo1.lat, geo1.lon).toFixed(1) : null;
+  const deg2 = geo2 ? bearing(geo2.lat, geo2.lon).toFixed(1) : null;
+  const deg3 = geo3 ? bearing(geo3.lat, geo3.lon).toFixed(1) : null;
+
+  // 名前→音霊
+  const firstChar = name.replace(/\s/g,'')[0];
+  const katakana = KANA_MAP[firstChar] || "ア";
+  const soundDir = SOUND_DIR[katakana] || "N";
+  const soundLayer = SOUND_LAYER[katakana] || "ten";
+
+  // 生年→五行→層
+  const { kan, gogyo } = yearToGogyo(year);
+  const gogyoLayer = GOGYO_LAYER[gogyo];
+
+  // 守護神決定ロジック
+  // 優先度：生まれた地の方位 × 五行の層 → 守護神確定
+  // 一致チェック
+  const mainDir = dir1;
+  const mainLayer = gogyoLayer;
+  const guardian = KAMI_DATA[mainDir]?.[mainLayer] || KAMI_DATA["N"]["ten"];
+
+  // 整合性チェック
+  const soundMatch = soundDir === mainDir;
+  const placeMatch2 = dir2 ? dir2 === mainDir : null;
+  const placeMatch3 = dir3 ? dir3 === mainDir : null;
+
+  document.getElementById('loading').classList.remove('on');
+
+  // AIによる深読み
+  const aiPrompt = `あなたは「天城16方位×48神」という独自の鑑定システムを使う鑑定師です。
+
+以下の鑑定結果をもとに、この人だけへのメッセージを書いてください。
+
+【依頼者情報】
+- 名前：${name}
+- 生年月日：${year}年${month}月${day}日
+- 五行：${kan}（${gogyo}）
+
+【守護神】
+- 神名：${guardian.name}（${guardian.reading}）
+- 方位：${mainDir}（${deg1}°）
+- 層：${LAYER_NAMES[mainLayer]}
+- 典拠：${guardian.source}
+
+【土地の方位】
+- 生まれた地（${place1}）：${mainDir}方位
+${dir2 ? `- 現在地（${place2}）：${dir2}方位` : ''}
+${dir3 ? `- 気になる地（${place3}）：${dir3}方位` : ''}
+
+【名前の音霊】
+- 最初の音：${katakana}（${SOUND_MEANINGS[katakana]}）
+- 対応方位：${soundDir}
+
+以下の形式でJSONのみ返してください（説明不要）：
+{
+  "born_reading": "生まれた地について50字以内でですます調で",
+  "now_reading": "${dir2 ? '現在地について50字以内でですます調で' : 'null'}",
+  "call_reading": "${dir3 ? '気になる地について50字以内でですます調で' : 'null'}",
+  "sound_reading": "名前の音霊${katakana}（${SOUND_MEANINGS[katakana]}）について40字以内でですます調で",
+  "total_message": "この人だけへの統合メッセージ。守護神・五行・音霊・土地を統合して200字程度。ですます調で。詩的に。",
+  "action": "この守護神と繋がるための具体的なアクション。50字以内。"
+}`;
+
+  let aiResult = null;
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:800,
+        messages:[{role:"user",content:aiPrompt}]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content.map(i=>i.text||'').join('');
+    const m = raw.match(/\{[\s\S]*\}/);
+    if (m) aiResult = JSON.parse(m[0]);
+  } catch(e) {}
+
+  renderResult({
+    name, katakana, kan, gogyo, gogyoLayer,
+    soundDir, soundLayer, soundMatch,
+    place1, place2, place3,
+    dir1, dir2, dir3, deg1, deg2, deg3,
+    mainDir, mainLayer, guardian,
+    placeMatch2, placeMatch3, aiResult
+  });
+}
+
+function renderResult(d) {
+  const res = document.getElementById('result');
+
+  // 一致度の判定
+  const matches = [
+    { label:`名前の音霊（${d.katakana}）の方位：${d.soundDir}`, hit: d.soundMatch },
+    { label:`生まれた地（${d.place1}）の方位：${d.dir1}`, hit: true },
+    d.dir2 ? { label:`現在地（${d.place2}）の方位：${d.dir2}`, hit: d.dir2===d.mainDir } : null,
+    d.dir3 ? { label:`気になる地（${d.place3}）の方位：${d.dir3}`, hit: d.dir3===d.mainDir } : null,
+  ].filter(Boolean);
+
+  const matchCount = matches.filter(m=>m.hit).length;
+  const matchMsg = matchCount >= 3 ? "非常に強い接続——複数の軸が同じ神を示しています。" :
+                   matchCount === 2 ? "明確な接続——二つの軸が守護神を指しています。" :
+                   "接続が始まっています——この神があなたを待っています。";
+
+  res.innerHTML = `
+    <div class="guardian-header">
+      <p class="guardian-label">あなたの守護神</p>
+      <h2 class="guardian-name">${d.guardian.name}</h2>
+      <p class="guardian-reading">${d.guardian.reading}</p>
+      <p class="guardian-source">${d.guardian.source}</p>
+      <p class="guardian-tagline">${d.guardian.tagline}</p>
+    </div>
+
+    <div class="three-layers">
+      <div class="layer-block">
+        <div class="layer-icon">🌱</div>
+        <div class="layer-type">生まれた地</div>
+        <div class="layer-place">${d.place1}</div>
+        <div class="layer-dir">${d.dir1}</div>
+        <div class="layer-deg">${d.deg1}°</div>
+      </div>
+      <div class="layer-block">
+        <div class="layer-icon">🏠</div>
+        <div class="layer-type">現在地</div>
+        <div class="layer-place">${d.place2||'—'}</div>
+        <div class="layer-dir">${d.dir2||'—'}</div>
+        <div class="layer-deg">${d.deg2 ? d.deg2+'°' : ''}</div>
+      </div>
+      <div class="layer-block">
+        <div class="layer-icon">✨</div>
+        <div class="layer-type">気になる地</div>
+        <div class="layer-place">${d.place3||'—'}</div>
+        <div class="layer-dir">${d.dir3||'—'}</div>
+        <div class="layer-deg">${d.deg3 ? d.deg3+'°' : ''}</div>
+      </div>
+    </div>
+
+    <div class="match-bar">
+      <p class="match-label">守護神との接続度</p>
+      <p style="font-size:13px;color:#2d6a35;font-weight:700;margin-bottom:12px;">${matchMsg}</p>
+      <div class="match-items">
+        ${matches.map(m=>`
+          <div class="match-item">
+            <div class="match-dot ${m.hit?'hit':'partial'}"></div>
+            <span>${m.label}${m.hit?' ✓':''}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="detail-sections">
+      <div class="detail-sec">
+        <p class="detail-sec-label">守護神について</p>
+        <p class="detail-sec-text">${d.guardian.detail}</p>
+      </div>
+
+      <div class="detail-sec">
+        <p class="detail-sec-label">あなたの五行と層</p>
+        <p class="detail-sec-text">
+          生まれた年（${d.kan}年）の五行は<strong>「${d.gogyo}」</strong>です。
+          五行「${d.gogyo}」は${LAYER_NAMES[d.gogyoLayer]}の層に対応しています。
+          ${LAYER_DESC[d.gogyoLayer]}
+        </p>
+      </div>
+
+      <div class="detail-sec">
+        <p class="detail-sec-label">名前の音霊「${d.katakana}」</p>
+        <p class="detail-sec-text">
+          お名前の最初の音「${d.katakana}」は、カタカムナで「${SOUND_MEANINGS[d.katakana]}」を意味します。
+          この音霊は${d.soundDir}方位と対応しています。
+          ${d.soundMatch ? `生まれた地の方位（${d.dir1}）と一致しています——名前と土地が同じ神を示しています。` : `生まれた地の方位（${d.dir1}）とは異なりますが、音霊の神（${KAMI_DATA[d.soundDir]?.ten?.name}）もあなたの縁の神のひとりです。`}
+        </p>
+      </div>
+
+      ${d.aiResult ? `
+      <div class="detail-sec">
+        <p class="detail-sec-label">3つの土地が語ること</p>
+        <p class="detail-sec-text">
+          ${d.aiResult.born_reading || ''}
+          ${d.aiResult.now_reading && d.aiResult.now_reading !== 'null' ? '<br><br>'+d.aiResult.now_reading : ''}
+          ${d.aiResult.call_reading && d.aiResult.call_reading !== 'null' ? '<br><br>'+d.aiResult.call_reading : ''}
+        </p>
+      </div>
+
+      <div class="detail-sec">
+        <p class="detail-sec-label">統合メッセージ</p>
+        <p class="detail-sec-text">${d.aiResult.total_message || ''}</p>
+      </div>
+
+      <div class="detail-sec">
+        <p class="detail-sec-label">この守護神と繋がるために</p>
+        <p class="detail-sec-text">${d.aiResult.action || ''}</p>
+      </div>
+      ` : ''}
+    </div>
+
+    <div class="god-voice">
+      <p class="god-voice-label">神からのことば</p>
+      <p class="god-voice-text">${d.guardian.voice}</p>
+    </div>
+
+    <button class="reset-btn" onclick="resetAll()">― もう一度鑑定する ―</button>
+  `;
+
+  res.classList.add('on');
+  res.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function resetAll() {
+  document.getElementById('result').classList.remove('on');
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('loading').classList.remove('on');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+</body>
+</html>
