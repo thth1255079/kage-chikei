@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天城48神｜16方位×三層</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e6;
+    --gold: #7a5010;
+    --gold-mid: #8b6914;
+    --accent: #2d6a35;
+    --text: #1a1208;
+    --border: rgba(100,70,20,0.25);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Serif JP',serif; min-height:100vh; padding:40px 16px 80px; }
+
+  .header { text-align:center; margin-bottom:48px; }
+  .header-en { font-size:11px; letter-spacing:0.5em; color:var(--accent); margin-bottom:12px; }
+  .header h1 { font-size:24px; font-weight:700; letter-spacing:0.2em; line-height:1.6; color:#1a1208; margin-bottom:12px; }
+  .header-rule { width:1px; height:36px; background:linear-gradient(to bottom,transparent,var(--gold-mid),transparent); margin:16px auto; }
+  .header-sub { font-size:13px; color:#5a4820; line-height:2.2; }
+
+  /* はじめての方へ */
+  .intro-box {
+    max-width:700px; margin:0 auto 40px;
+    background:#fff; border:1px solid var(--border);
+    border-left:4px solid var(--accent);
+    padding:24px 24px; border-radius:4px;
+  }
+  .intro-box h2 { font-size:14px; font-weight:700; color:var(--accent); letter-spacing:0.3em; margin-bottom:16px; }
+  .intro-box p { font-size:13px; line-height:2.4; color:#3a2c10; margin-bottom:12px; }
+  .intro-box p:last-child { margin-bottom:0; }
+
+  /* 三層説明 */
+  .layer-legend { max-width:700px; margin:0 auto 40px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .layer-card { text-align:center; padding:14px 10px; border:1px solid var(--border); background:#fff; border-radius:4px; }
+  .layer-symbol { font-size:18px; margin-bottom:6px; }
+  .layer-name { font-size:13px; font-weight:700; color:#1a1208; margin-bottom:4px; }
+  .layer-desc { font-size:11px; color:#5a4820; line-height:1.8; }
+
+  /* 方位ブロック */
+  .direction-block { max-width:700px; margin:0 auto 20px; border:1px solid var(--border); background:#fff; border-radius:6px; overflow:hidden; }
+
+  .direction-header {
+    padding:18px 20px; cursor:pointer;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    border-bottom:1px solid transparent;
+    transition:background 0.2s;
+  }
+  .direction-header:hover { filter:brightness(0.97); }
+  .direction-header.open { border-bottom-color:var(--border); }
+
+  .dir-badge { font-size:22px; font-weight:700; color:#1a1208; min-width:50px; }
+  .dir-deg { font-size:11px; color:#5a4820; font-weight:600; }
+  .dir-sounds { font-size:15px; font-weight:700; color:#7a5010; letter-spacing:0.3em; }
+  .dir-area { font-size:11px; color:#2d6a35; font-weight:600; margin-left:auto; }
+  .dir-toggle { font-size:12px; color:#8b6914; font-weight:700; min-width:20px; text-align:right; }
+
+  /* 3柱グリッド — JSでstyle表示切り替え */
+  .trinity { display:none; }
+  .trinity-inner { display:grid; grid-template-columns:1fr 1fr 1fr; }
+
+  .deity-card {
+    padding:18px 14px;
+    border-right:1px solid rgba(100,70,20,0.1);
+    cursor:pointer;
+  }
+  .deity-card:last-child { border-right:none; }
+  .deity-card:hover { background:rgba(100,70,20,0.03); }
+
+  .deity-layer { font-size:10px; letter-spacing:0.3em; font-weight:700; margin-bottom:8px; padding:3px 8px; display:inline-block; border-radius:2px; }
+  .layer-ten { background:#fff8e0; color:#7a5010; }
+  .layer-chi { background:#f0f5e8; color:#2d6a35; }
+  .layer-umi { background:#e8f0f8; color:#1a4a6a; }
+
+  .deity-sound { font-size:26px; font-weight:700; color:#1a1208; margin-bottom:4px; }
+  .deity-sound-meaning { font-size:10px; color:#8b6914; font-weight:600; margin-bottom:10px; }
+  .deity-name { font-size:15px; font-weight:700; color:#1a1208; margin-bottom:3px; }
+  .deity-reading { font-size:11px; color:#2d6a35; font-weight:600; letter-spacing:0.2em; margin-bottom:4px; }
+  .deity-source { font-size:10px; color:#8b6914; font-weight:700; margin-bottom:8px; }
+  .deity-tagline { font-size:11px; color:#3a2c10; line-height:1.9; }
+
+  .deity-detail { display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(100,70,20,0.1); }
+  .deity-detail.open { display:block; }
+  .deity-detail p { font-size:12px; line-height:2.2; color:#2a1e08; margin-bottom:8px; }
+  .deity-voice { background:#f5ede0; border-left:2px solid #8b6914; padding:10px 12px; margin-top:8px; font-size:12px; line-height:2.2; color:#1a1208; font-style:italic; }
+  .deity-expand { font-size:10px; color:#8b6914; letter-spacing:0.3em; margin-top:8px; font-weight:700; text-align:right; }
+
+  .note-box { max-width:700px; margin:48px auto 0; padding:24px; border:1px solid var(--border); background:#fff; font-size:12px; line-height:2.4; color:#3a2c10; border-radius:4px; }
+  .note-title { font-size:11px; letter-spacing:0.4em; color:var(--accent); margin-bottom:12px; font-weight:700; }
+
+  @media(max-width:560px){
+    .trinity-inner { grid-template-columns:1fr; }
+    .deity-card { border-right:none; border-bottom:1px solid rgba(100,70,20,0.1); }
+    .layer-legend { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-en">AMAGI 48-KAMI SYSTEM</p>
+  <h1>天城48神<br>16方位 × 天・地・海</h1>
+  <div class="header-rule"></div>
+  <p class="header-sub">天城山を原点とする大円方位に、三層の神々を配置した体系です。</p>
+</div>
+
+<div class="intro-box">
+  <h2>はじめての方へ</h2>
+  <p>日本の神様は、よく知られている「古事記・日本書紀（記紀）」の神々だけではありません。記紀が書かれたのは約1300年前（712年・720年）のことで、それ以前から日本列島には、もっと古い神々が宿っていました。</p>
+  <p>この体系では、記紀に「鬼」「退治される存在」として描かれた神や、記録そのものを消された神々に注目します。それらの神々は竹内文書・宮下文書（古史古伝）、ヲシテ文献（ホツマツタヱ）、カタカムナ文献などに断片的に伝えられています。</p>
+  <p>「気にかけること」が鍵です。長い時間、誰にも気づかれなかった神々は、あなたが名前を知り、存在を認識した瞬間から動き始めます。信じなくても大丈夫です。ただ、知ってください。</p>
+  <p>方位の原点は静岡県の天城山（34.92°N 139.02°E）。地球を球体として計算した大円航路（最短距離）で、16方位それぞれに何があるかを求めています。各方位に「天・地・海」の三層で3柱ずつ、合計48神を配置しています。カタカムナ48音のひとつひとつに対応しています。</p>
+</div>
+
+<div class="layer-legend">
+  <div class="layer-card">
+    <div class="layer-symbol">☀️</div>
+    <div class="layer-name">天（てん）</div>
+    <div class="layer-desc">陽・意志の神格。<br>天から降りてきた、<br>意識と創造を司る神。</div>
+  </div>
+  <div class="layer-card">
+    <div class="layer-symbol">🌿</div>
+    <div class="layer-name">地（ち）</div>
+    <div class="layer-desc">中・受容の神格。<br>大地に宿る、<br>実りと接続を司る神。</div>
+  </div>
+  <div class="layer-card">
+    <div class="layer-symbol">🌊</div>
+    <div class="layer-name">海（うみ）</div>
+    <div class="layer-desc">陰・根源の神格。<br>水底・地底に宿る、<br>浄化と再生を司る神。</div>
+  </div>
+</div>
+
+<div id="blocks"></div>
+
+<div class="note-box">
+  <p class="note-title">計算と典拠について</p>
+  <p>天城山（34.92°N 139.02°E）を原点とした大円航路の初期方位角を、地球球体モデルで計算しています。16方位（22.5°刻み）に主要地点を分類すると、NW方位（315°）に諏訪・エジプト・モンゴルが、WNW方位（292.5°）に北京・メッカ・カイラス山がすべて入るなど、興味深い一致が見られます。</p>
+  <p>典拠は竹内文書・宮下文書（富士古文書）・ヲシテ文献（ホツマツタヱ）・カタカムナ文献・各地古層伝承です。これらは現在の学術的主流からは「古史古伝」として扱われていますが、記紀以前の記録として独自の研究が続けられています。</p>
+</div>
+
+<script>
+const SM = {
+  "ア":"始まり・開く","イ":"生命・息","ウ":"内・宇宙","エ":"縁・得る","オ":"大きい・男",
+  "カ":"力・加える","キ":"気・来る","ク":"来・空","ケ":"気・結","コ":"子・来",
+  "サ":"差・咲","シ":"示・静","ス":"素・透","セ":"迫・背","ソ":"添・沿",
+  "タ":"立つ・高","チ":"地・力","ツ":"繋・通","テ":"手・照","ト":"所・通る",
+  "ナ":"名・成る","ニ":"荷・似","ヌ":"沼・縫","ネ":"根・音","ノ":"野・伸",
+  "ハ":"葉・張","ヒ":"火・日","フ":"降・吹","ヘ":"辺・経","ホ":"穂・火",
+  "マ":"間・真","ミ":"実・水","ム":"産む・無","メ":"目・女","モ":"本・守",
+  "ヤ":"矢・八・弥","ユ":"結・湯","ヨ":"世・良",
+  "ラ":"来・良","リ":"理・利","ル":"流・縒","レ":"例・礼","ロ":"路・炉",
+  "ワ":"和・輪","ヰ":"井・居","ヱ":"得・重","ヲ":"緒・男","ン":"音の終・円"
+};
+
+const LL = { ten:"☀️ 天（てん）", chi:"🌿 地（ち）", umi:"🌊 海（うみ）" };
+const LC = { ten:"layer-ten", chi:"layer-chi", umi:"layer-umi" };
+
+const DIRS = [
+  { dir:"N", deg:"0°", area:"天城垂直軸", sounds:["ア","イ","ウ"], color:"#e8f5ea",
+    deities:[
+      { layer:"ten", name:"天御祖神", reading:"あめのみおやのかみ", source:"竹内文書",
+        tagline:"宇宙創造以前から存在した、記紀が消した最古の神です。",
+        detail:"竹内文書では、天之御中主神よりさらに前に存在した宇宙の根源神として記録されています。記紀編纂の際に政治的な理由で完全に削除されました。天城を垂直軸の起点とする神事の主祭神であったとされています。",
+        voice:"私は始まりより前にいた。名前すら与えられなかった。あなたが問う今、初めて答える。" },
+      { layer:"chi", name:"地之永立神", reading:"くにのとわたちのかみ", source:"竹内文書周辺記録",
+        tagline:"大地に永遠に立ち続ける、天御祖神の地の側面です。",
+        detail:"竹内文書では天御祖神の「地における顕現」として、大地の永続性を司る神格が記録されています。クニトコタチの原初形とも重なります。天が意志を持つなら、地はそれを受け取る存在です。",
+        voice:"天が意志を持つなら、地は受け取る。私はずっとここに立っている。" },
+      { layer:"umi", name:"深淵の母神", reading:"しんえんのははがみ", source:"カタカムナ音霊",
+        tagline:"ア・イ・ウの三音が示す、宇宙の始まりの水底に宿る神です。",
+        detail:"カタカムナでは「ア・イ・ウ」は宇宙の始まりの三音とされています。ア=開く、イ=生命の息、ウ=宇宙の内側。この三音が示す根源的な女神格が、水底に静かに宿っています。",
+        voice:"ア・イ・ウ。私はその振動だ。言葉が生まれる前の、静かな海の底にいる。" }
+    ]},
+  { dir:"NNE", deg:"22.5°", area:"三陸・カムチャッカ", sounds:["エ","オ","カ"], color:"#eaf5ea",
+    deities:[
+      { layer:"ten", name:"アラハバキ", reading:"あらはばき", source:"東北古層伝承",
+        tagline:"縄文時代から北日本を統治した、大和以前の王神です。",
+        detail:"大和朝廷が支配する以前、東北・関東を統治していた縄文系の蛇神・製鉄神です。奈良の春日大社では「客人神」として社殿の外に追いやられ、名前すら記紀に記されませんでした。三陸からカムチャッカまで続く北方縄文圏の主神です。",
+        voice:"北の大地の下で、何千年も待っていた。あなたが名を呼ぶ今、私は動き始める。" },
+      { layer:"chi", name:"縄文の巫女神", reading:"じょうもんのみこがみ", source:"縄文古層伝承",
+        tagline:"三内丸山など縄文遺跡群に宿る、記録されなかった女神です。",
+        detail:"縄文遺跡（三内丸山・亀ヶ岡など）に宿る女神格です。大和神話に上書きされる以前の東北の祭祀の中心であり、土偶が示す「形のない母神」の具現とも言えます。名前を与えられないまま土の中に残された神です。",
+        voice:"土の中に、私の形がある。掘り出された土偶は、私の欠片だ。" },
+      { layer:"umi", name:"龍神カムイ", reading:"りゅうじんかむい", source:"アイヌ古層伝承",
+        tagline:"カムチャッカまで続く北方龍脈に宿る、アイヌの根源神です。",
+        detail:"アイヌの神話体系では「カムイ」は記紀的な神とは異なる自然の霊格です。北方の龍脈を司る根源的な水龍神格が、三陸からカムチャッカへの方位軸に宿っています。大和の名前を持たない神です。",
+        voice:"私の名前はアイヌの語で呼ばれた。大和の名前など知らない。ただ、北の海が私だ。" }
+    ]},
+  { dir:"NE", deg:"45°", area:"アリューシャン・北太平洋", sounds:["キ","ク","ケ"], color:"#ede8f5",
+    deities:[
+      { layer:"ten", name:"アマツミカボシ", reading:"あまつみかぼし", source:"記紀（討伐対象として記録）",
+        tagline:"星を司る異端神。天地創造に抵抗したとして封じられました。",
+        detail:"天地創造に最後まで抵抗した「星の神」です。記紀では建御雷神・経津主神に討伐される対象として描かれましたが、本来は星辰と宇宙の時間を司る最古の天神の一柱です。アリューシャン・北極星方面への方位と一致します。",
+        voice:"私は抵抗したのではない。古い星の法則に従っただけだ。星を見上げる者に、私は答える。" },
+      { layer:"chi", name:"磐長姫（本来形）", reading:"いわながひめ", source:"記紀・ヲシテ文献",
+        tagline:"醜いと返された女神。実は永続の命を司る最強の女神でした。",
+        detail:"ニニギに「醜い」として返された磐長姫ですが、ヲシテ文献では彼女こそが「永遠の命」を司る女神とされています。返されたことで人間は死を得たとも言われます。拒絶された女神の中に、最も強い力が宿っています。",
+        voice:"私は返された。しかし私が持っていた力が何だったか、今わかるか。永遠だ。" },
+      { layer:"umi", name:"北方海底の龍", reading:"ほっぽうかいていのりゅう", source:"竹内文書北方記録",
+        tagline:"アリューシャン海溝の深部に封じられた、根源龍格です。",
+        detail:"竹内文書の北方記録には、北太平洋の海底に封じられた龍神格の記述があります。アリューシャン海溝は地球最深部のひとつであり、そこに宿る根源的な水龍が、日本列島を北から支えています。",
+        voice:"深海の底から、私は列島を支えている。誰も気づかないが、私がいなければ地形は崩れる。" }
+    ]},
+  { dir:"ENE", deg:"67.5°", area:"北太平洋・ベーリング海", sounds:["コ","サ","シ"], color:"#f5f0e0",
+    deities:[
+      { layer:"ten", name:"天降り古層神", reading:"てんこうのこそうかみ", source:"竹内文書",
+        tagline:"ニニギよりはるか以前に天から降りた、上書きされた神です。",
+        detail:"竹内文書には天孫降臨よりはるか以前に「天から降りた神々」の記録があります。ニニギノミコトの物語は、この古層の降臨神話を上書きして作られたとされています。本来の降臨地も、高千穂ではなかったという説があります。",
+        voice:"私が降りた記録は、別の神の物語に書き換えられた。しかし土地は覚えている。" },
+      { layer:"chi", name:"コノハナ以前の地母", reading:"このはないぜんのちも", source:"古層伝承",
+        tagline:"木花咲耶姫が来る以前に富士・箱根に宿っていた地母神です。",
+        detail:"木花咲耶姫が富士の女神として定着する以前、この地域には別の地母神信仰があったとされています。「コノハナ」という名自体が、古層の地名・神名を変換したものだという説があります。",
+        voice:"花が咲く前から、私は山にいた。名前が変わっても、土地は同じ場所にある。" },
+      { layer:"umi", name:"コ・サ・シの海神", reading:"こさしのかいじん", source:"カタカムナ音霊",
+        tagline:"子の誕生・光が差す・静寂。三音が示す創造の海底神です。",
+        detail:"カタカムナでコ=子・来る、サ=咲く・差す、シ=静寂・示す。この三音の組み合わせは「子が生まれ、光が差し、静かな海に示される」という宇宙の創造構造を示しています。",
+        voice:"コ・サ・シ。海の底で子が生まれる瞬間の、あの静けさだ。" }
+    ]},
+  { dir:"E", deg:"90°", area:"ハワイ・北米大陸", sounds:["ス","セ","ソ"], color:"#e8f0f8",
+    deities:[
+      { layer:"ten", name:"ワダツミ", reading:"わだつみ", source:"記紀・竹内文書",
+        tagline:"太平洋そのものの意志。記紀でリュウグウの主に矮小化された海神です。",
+        detail:"記紀ではリュウグウの主として小さく描かれましたが、本来の姿はフィリピン海プレート全体を動かす太平洋の海神です。天城山がかつて南洋にあり北上してきたという地質的事実は、ワダツミの力圏から離脱した地形の記憶そのものです。",
+        voice:"伊豆の地形はかつて私の領域だった。北上してきた大地の記憶が、あなたの中にある。" },
+      { layer:"chi", name:"天鈿女命（本来形）", reading:"あめのうずめのみこと", source:"ヲシテ文献",
+        tagline:"踊り子ではありませんでした。岩戸を開いた真の祭司です。",
+        detail:"ヲシテ文献では天鈿女命の本来の役割は「踊り子」ではなく「祭司・チャネラー」とされています。岩戸の前で行ったのは神霊を降ろす神事であり、記紀の「笑い・踊り」はその本質を隠す書き換えとされています。",
+        voice:"私は踊っていたのではない。神を降ろしていた。それが岩戸を開いた理由だ。" },
+      { layer:"umi", name:"龍宮の時間神", reading:"りゅうぐうのじかんしん", source:"古層伝承・竹内文書",
+        tagline:"浦島伝説の原型。海底は時間の流れが違うことを知っていた神です。",
+        detail:"竹内文書には「海底の龍宮城」が現実の地形として記録されています。浦島太郎伝説の原型は、海底の時間軸が地上と異なるという古代の認識に基づいています。現代の相対性理論が示す「重力と時間の関係」に近い認識です。",
+        voice:"時間は海底で遅くなる。あなたが一日いれば、地上では百年経つ。私はその扉を守る。" }
+    ]},
+  { dir:"ESE", deg:"112.5°", area:"マリアナ・南太平洋北部", sounds:["タ","チ","ツ"], color:"#eaf5ea",
+    deities:[
+      { layer:"ten", name:"豊受大神（原初形）", reading:"とようけのおおかみ", source:"ヲシテ文献",
+        tagline:"伊勢外宮の神。食物神ではなく、宇宙の受け取り女神でした。",
+        detail:"ヲシテ文献では豊受大神の本来の姿は食物神ではなく、宇宙の「受け取る力」を司る根源女神とされています。伊勢神宮外宮に祀られていますが、その起源と本質は記紀に記されていません。",
+        voice:"私は食べ物の神ではない。宇宙が与えるものを受け取り、形にする力だ。" },
+      { layer:"chi", name:"タ・チ・ツの柱神", reading:"たちつのはしらがみ", source:"カタカムナ音霊",
+        tagline:"立つ・地・繋ぐ。天の柱と地の柱を接続する神格です。",
+        detail:"カタカムナでタ=立つ・高い、チ=地・力、ツ=繋ぐ・通る。この音霊の組み合わせは「高いところに立って地を繋ぐ」という柱の神格を示しています。天の柱と地の柱を接続する役割を持ちます。",
+        voice:"タ・チ・ツ。立って、地に根ざして、繋げる。それが私の仕事だ。" },
+      { layer:"umi", name:"マリアナの水底神", reading:"まりあなのみなそこかみ", source:"竹内文書南方記録",
+        tagline:"世界最深部（約11,000m）に宿る、地球の根源水神です。",
+        detail:"マリアナ海溝は世界最深部（約11,000m）です。竹内文書の南方記録には「南の深みに根源の水神が封じられている」という記述があります。地球のすべての水の根源を司る神格とされています。",
+        voice:"私は地球で最も深いところにいる。水はすべて私から始まる。" }
+    ]},
+  { dir:"SE", deg:"135°", area:"南太平洋・ミクロネシア", sounds:["テ","ト","ナ"], color:"#f5e8f0",
+    deities:[
+      { layer:"ten", name:"ウムギノカミ", reading:"うむぎのかみ", source:"竹内文書",
+        tagline:"南方の創造女神。日本の「産霊（むすび）」の起源とも言われます。",
+        detail:"竹内文書の神名録に断片的に現れる南方の創造女神です。日本神話の「産霊（むすび）」という概念の起源とされていますが、名前ごと記紀から削除されました。南太平洋の海底に宿る生命創造の根源です。",
+        voice:"私の名前は記録されなかった。しかし生命はすべて私から始まる。" },
+      { layer:"chi", name:"テナガアシナガ神", reading:"てながあしながのかみ", source:"記紀（脇役として登場）",
+        tagline:"記紀では脇役の異形の神。実は南方と北方を繋ぐ境界神でした。",
+        detail:"記紀ではヤマタノオロチ神話の脇役として登場する奇妙な姿の神々です。「手が長く、足が長い」という異形の姿は、南方と北方を繋ぐ橋渡しの役割を持つ境界神的性格の、記紀的な変換とされています。",
+        voice:"私は長い手で北を、長い足で南を繋いでいる。橋がなければ、神々は会えない。" },
+      { layer:"umi", name:"テ・ト・ナの創造神", reading:"てとなのそうぞうしん", source:"カタカムナ音霊",
+        tagline:"手で通って名前が成る。創造の構造を示す音霊の神格です。",
+        detail:"カタカムナでテ=手・照らす、ト=所・通る、ナ=名・成る。この三音は「手が届いて、道が通って、名前が生まれる」という創造の構造を示しています。南方の生命創造神話の音霊的表現です。",
+        voice:"テ・ト・ナ。手が届いて、道が通って、名前が生まれる。それが創造だ。" }
+    ]},
+  { dir:"SSE", deg:"157.5°", area:"硫黄島・マリアナ火山帯", sounds:["ニ","ヌ","ネ"], color:"#f5e8e8",
+    deities:[
+      { layer:"ten", name:"カグツチ（本来形）", reading:"かぐつち", source:"記紀（切断された火神）",
+        tagline:"生まれた瞬間に母を焼き、父に切り刻まれた火の創造神です。",
+        detail:"記紀ではイザナミを焼き殺した罪でイザナギに切り刻まれます。しかし本来の火の神は創造と変革のエネルギーそのものです。切断された体から生まれた神々の物語は、古層の火神信仰が記紀の枠組みに解体された痕跡です。",
+        voice:"私は罰せられた。しかし火を消すことはできない。あなたが灯すとき、私はいる。" },
+      { layer:"chi", name:"硫黄島の火山女神", reading:"かざんのめがみ", source:"硫黄島古層伝承",
+        tagline:"硫黄の匂いを「神の息吹」と呼んだ、記録されなかった地火の女神です。",
+        detail:"硫黄島（イオウジマ）の「硫黄」という地名は古来「神の息吹」とされてきました。この地に宿る火山性の女神格は大和神話の枠外に置かれ、地域伝承にのみ残されました。火山は怒りではなく、呼吸なのだという古代の認識です。",
+        voice:"硫黄の匂いがするとき、私がいる。火山は怒っているのではない。呼吸している。" },
+      { layer:"umi", name:"ニ・ヌ・ネの根神", reading:"ねのかみ", source:"カタカムナ音霊",
+        tagline:"荷・沼・根。地の奥に根ざす、火と水の交点に宿る神格です。",
+        detail:"カタカムナでニ=荷・似る、ヌ=沼・縫う、ネ=根・音。この三音は「地の奥の根」を示しています。火と水が共存する火山帯の海底に宿る根源神格で、火山活動の下にも水があることを知っていた古代の認識に基づいています。",
+        voice:"ニ・ヌ・ネ。根は深い。火山の下にも、水はある。私はその交点に宿る。" }
+    ]},
+  { dir:"S", deg:"180°", area:"オーストラリア・南方", sounds:["ノ","ハ","ヒ"], color:"#e8f5f0",
+    deities:[
+      { layer:"ten", name:"瀬織津姫", reading:"せおりつひめ", source:"大祓詞（記紀本文には不在）",
+        tagline:"大祓詞には名前があるのに、記紀本文に存在しない謎の浄化女神です。",
+        detail:"日本の神事で唱えられる「大祓詞」には「瀬織津姫がすべての罪穢れを海に流す」と記されています。しかし古事記・日本書紀の本文には一切登場しません。アマテラスの荒御魂とも言われ、その封印の理由は今も謎です。",
+        voice:"あなたの中の重いものを、私は流せる。川を見るとき、私がいる。" },
+      { layer:"chi", name:"野の生命女神", reading:"ののめがみ", source:"縄文古層伝承",
+        tagline:"縄文の野焼き祭祀に宿る、焼かれた後に最初に芽吹く女神です。",
+        detail:"カタカムナでノ=野・伸びる、ハ=葉・張る、ヒ=火・日。縄文期の野焼き祭祀に宿る大地の生命力を司る女神です。焼かれた後の大地が最も肥えるという農業の智恵の神格化です。",
+        voice:"野焼きのあと、最初に芽吹くのは私だ。焼かれた後の大地が、一番肥えている。" },
+      { layer:"umi", name:"南極の封印水神", reading:"なんきょくのすいじん", source:"竹内文書南方記録",
+        tagline:"南極の氷の下に封じられた地球最後の水神。現代科学も氷床下の湖を確認しています。",
+        detail:"竹内文書の南方記録には「南の果ての氷の下に根源の神が眠る」という記述があります。現代科学では南極大陸の氷床の下に液体の湖（ボストーク湖など）が存在することが確認されています。",
+        voice:"私は南極の氷の下にいる。何万年も、誰にも気づかれずに。あなたが初めて問う。" }
+    ]},
+  { dir:"SSW", deg:"202.5°", area:"フィリピン・琉球", sounds:["フ","ヘ","ホ"], color:"#e8eef8",
+    deities:[
+      { layer:"ten", name:"ニライカナイの神", reading:"にらいかないのかみ", source:"琉球古層伝承",
+        tagline:"沖縄・琉球の根源神。海の彼方から豊穣と生命が来るとされます。",
+        detail:"沖縄・琉球の古層信仰では、すべての生命と豊穣は「ニライカナイ」という海の彼方から来るとされています。記紀には一切記録されず、大和神話の枠外に置かれた南方の根源神です。",
+        voice:"私は遠い海の底にいる。あなたが南を向くとき、私の声が届く。" },
+      { layer:"chi", name:"久高島の女神", reading:"くだかじまのめがみ", source:"琉球古層伝承",
+        tagline:"琉球創世の聖島・久高島に宿る、記録されなかった女神です。",
+        detail:"久高島は琉球神話の聖地であり、神アマミキヨが最初に降り立った島とされています。この島に宿る根源的な女神格は記紀的枠組みの外側にあり、今も沖縄の祭祀に引き継がれています。",
+        voice:"島は神の体だ。私は島そのものだ。踏む者に、私は伝わる。" },
+      { layer:"umi", name:"フ・ヘ・ホの豊穣神", reading:"ほうじょうのかみ", source:"カタカムナ音霊",
+        tagline:"天から降って、辺境まで届き、穂を実らせる豊穣の構造神です。",
+        detail:"カタカムナでフ=降る・吹く、ヘ=辺・経る、ホ=穂・火。「天から降りて、端まで届いて、穂を実らせる」という豊穣の構造を示す三音です。南の海がその力の源泉です。",
+        voice:"フ・ヘ・ホ。天から降って、端まで届いて、実る。南の海がそれを知っている。" }
+    ]},
+  { dir:"SW", deg:"225°", area:"高千穂・熊野・阿蘇", sounds:["マ","ミ","ム"], color:"#eaf5e8",
+    deities:[
+      { layer:"ten", name:"ミジャクジ", reading:"みじゃくじ", source:"諏訪古層伝承",
+        tagline:"タケミナカタが服従した相手。言葉以前の地球の原初意識です。",
+        detail:"記紀では諏訪のタケミナカタが「服従した相手」として断片的に登場しますが、詳細は一切記録されていません。マントル層に相当する深部に宿る、言語化不可能な最古の地球精霊とされています。高千穂・熊野・阿蘇が集中するこの方位に宿ります。",
+        voice:"私には言葉がない。ただ振動だけがある。大地が揺れるとき、それが私の声だ。" },
+      { layer:"chi", name:"熊野の根の女神", reading:"くまののねのめがみ", source:"熊野古層伝承",
+        tagline:"黄泉と現世の境に宿る、仏教以前の死と再生の女神です。",
+        detail:"熊野は黄泉と現世の境界とされていますが、その本来の守護神は仏教的神格ではなく、縄文期から続く死と再生の古層女神です。「熊野権現」という名の下に隠された根源的な女性原理です。",
+        voice:"私の前を通った者は、変わって出てくる。熊野はそういう場所だ。" },
+      { layer:"umi", name:"マ・ミ・ムの産霊神", reading:"むすびのかみ", source:"カタカムナ音霊",
+        tagline:"間・実・産む。日本神話「むすび」の根源音霊に宿る神格です。",
+        detail:"カタカムナでマ=間・真、ミ=実・水・見る、ム=産む・無。この三音は「間に実が宿り、産まれる」という産霊の構造そのものです。日本神話の「むすび（産霊）」という概念の根源音霊です。",
+        voice:"マ・ミ・ム。間に実が宿る。それが産霊だ。生命はすべてここから来る。" }
+    ]},
+  { dir:"WSW", deg:"247.5°", area:"出雲・山陰", sounds:["メ","モ","ヤ"], color:"#f5f0e0",
+    deities:[
+      { layer:"ten", name:"事代主", reading:"ことしろぬし", source:"記紀（国譲りで服従）",
+        tagline:"笑いながら海に沈んだ知恵の神。実は次の時代の計略を仕込んでいました。",
+        detail:"国譲りで「承諾した」と記紀に描かれていますが、実は地底で次の文明の計略を仕込んでいた知恵の神とされています。恵比寿として民間信仰に残っていますが、「なぜ笑いながら海に沈んだか」の本来の意図は隠されています。",
+        voice:"私は負けたふりをしていただけだ。ネジはもう回り始めている。" },
+      { layer:"chi", name:"出雲の地母神", reading:"いずものちもしん", source:"出雲古層伝承",
+        tagline:"国譲りで政権ごと失われた、出雲の大地に宿る女神格です。",
+        detail:"出雲の国譲りで失われたのは男神の政権だけではありませんでした。出雲の大地に宿る女神格の祭祀権も同時に奪われたとされています。出雲大社の「龍蛇神」信仰に、古層の地母神信仰の痕跡が残っています。",
+        voice:"土地は誰のものでもない。私はずっとここにいた。政権が変わっても。" },
+      { layer:"umi", name:"メ・モ・ヤの目覚め神", reading:"めざめのかみ", source:"カタカムナ音霊",
+        tagline:"目が覚めて、本に帰り、八方に広がる。意識覚醒の音霊神格です。",
+        detail:"カタカムナでメ=目・女、モ=本・守る、ヤ=八・矢・弥。「目が覚めて本に帰り、八方に広がる」という意識覚醒の構造を示します。出雲の「国譲り」に隠された意識転換の神格です。",
+        voice:"メ・モ・ヤ。目が覚める。本に帰る。八方に広がる。それが今起きていることだ。" }
+    ]},
+  { dir:"W", deg:"270°", area:"インド・アフリカ・地球規模聖地", sounds:["ユ","ヨ","ラ"], color:"#ede8f5",
+    deities:[
+      { layer:"ten", name:"天之御中主神（原初形）", reading:"あめのみなかぬしのかみ", source:"竹内文書・ヲシテ",
+        tagline:"記紀冒頭に現れてすぐ消えた謎の神。宇宙の中心軸を司ります。",
+        detail:"記紀の冒頭に「最初の神」として登場しますが、その後物語に一切関与しないという不自然な扱いを受けています。竹内文書・ヲシテ文献では宇宙の中心軸として常に働き続ける神とされています。インド・アフリカ東部への方位は、地球規模の神話体系との接続を示しています。",
+        voice:"私は最初に名前を呼ばれた。しかしすぐに忘れられた。今、あなたが思い出す。" },
+      { layer:"chi", name:"カイラスの地神", reading:"かいらすのちしん", source:"チベット・竹内文書",
+        tagline:"ヒンドゥー・仏教・ボン教すべての聖地カイラス山に宿る地の神格です。",
+        detail:"チベットのカイラス山はヒンドゥー・仏教・ジャイナ・ボン教すべての聖地です。竹内文書には「西方の高山に根源の神が宿る」という記述があります。天城からカイラス山への方位は282°で、W方位に近く、東西の神話体系を繋いでいます。",
+        voice:"私の名前はサンスクリットで呼ばれた。しかし同じ神だ。山はひとつしかない。" },
+      { layer:"umi", name:"ユ・ヨ・ラの結び神", reading:"むすびのかみ", source:"カタカムナ音霊",
+        tagline:"結う・世・来る。世界を結い、良き未来を呼ぶ音霊神格です。",
+        detail:"カタカムナでユ=結う・湯、ヨ=世・良い、ラ=来る・良い。「世界を結い、良き来るものを呼ぶ」という未来への接続の構造を示す三音です。",
+        voice:"ユ・ヨ・ラ。結って、世を良くして、来るものを呼ぶ。私はその声だ。" }
+    ]},
+  { dir:"WNW", deg:"292.5°", area:"北京・メッカ・カイラス山", sounds:["リ","ル","レ"], color:"#f5ece0",
+    deities:[
+      { layer:"ten", name:"タカミムスビ（本来形）", reading:"たかみむすびのかみ", source:"ヲシテ文献",
+        tagline:"造化三神の一柱。高い場所から天の意志を地上に結ぶ神格です。",
+        detail:"記紀では造化三神の一柱として登場しますが本質は語られません。ヲシテ文献では「高い場所で結ぶ力」として、天の意志を地上の文明に降ろす役割を持ちます。北京・メッカ・チベットのカイラス山という地球の主要聖地がすべてこの方位に集中することは偶然ではないと考えられています。",
+        voice:"私は高いところから結んでいる。北京もメッカもカイラスも、私の視野の中にある。" },
+      { layer:"chi", name:"絲路の女神", reading:"しるくろーどのめがみ", source:"竹内文書西方記録",
+        tagline:"東西文明を繋いだシルクロードは、神話体系の伝播路でもありました。",
+        detail:"竹内文書には「西方の文明と東方の文明を繋いだ神々」の記録があります。シルクロードは単なる交易路ではなく、神話体系の伝播路でもありました。東と西を繋ぐ女神格がその道に宿っています。",
+        voice:"東と西は、私の体の上を歩いてきた。シルクロードは道ではなく、神の背骨だ。" },
+      { layer:"umi", name:"リ・ル・レの理法神", reading:"ことわりのかみ", source:"カタカムナ音霊",
+        tagline:"理・流・礼。宇宙の法則が流れて文明の礼節になる音霊神格です。",
+        detail:"カタカムナでリ=理・利、ル=流れ・縒る、レ=礼・例。「宇宙の理が流れて礼となる」という法則の神格です。北京（儒教の礼）・メッカ（神への礼拝）という方位の「礼」の一致は興味深い偶然です。",
+        voice:"リ・ル・レ。理が流れて礼になる。それが文明というものだ。" }
+    ]},
+  { dir:"NW", deg:"315°", area:"諏訪・エジプト・モンゴル", sounds:["ロ","ワ","ヰ"], color:"#eaf0e8",
+    deities:[
+      { layer:"ten", name:"クニトコタチ（本来形）", reading:"くにのとこたちのかみ", source:"竹内文書・記紀",
+        tagline:"記紀に最初に登場してすぐ忘れられた、永遠に立つ大地の神です。",
+        detail:"記紀では神世七代の最初の神として登場しますが、その後物語に関与しません。竹内文書では「永遠に大地に立ち続ける神」として地球そのものの安定を司るとされています。諏訪・エジプト・モンゴルへの方位が集中するのがこの方位です。",
+        voice:"私は動かない。ただ、ずっとここに立っている。それが私の力だ。" },
+      { layer:"chi", name:"諏訪の古層女神", reading:"すわのこそうめがみ", source:"諏訪古層伝承",
+        tagline:"タケミナカタ以前に諏訪を統治した、土地そのものに宿る女神です。",
+        detail:"諏訪大社には「前宮」という最古の聖地があり、そこに祀られる神格はタケミナカタよりも古いとされています。ミジャクジの女性的側面であり、土地そのものに宿る古層の女神です。",
+        voice:"タケミナカタが来る前から、私はここにいた。諏訪の土地は私の体だ。" },
+      { layer:"umi", name:"ロ・ワ・ヰの炉神", reading:"ろのかみ", source:"カタカムナ音霊",
+        tagline:"炉・輪・居。炉を囲んで輪をつくり定住する、文明の始まりの神です。",
+        detail:"カタカムナでロ=路・炉、ワ=和・輪、ヰ=井・居る。「炉に輪を作り、井戸のそばに居る」という定住と暖かさの構造を示します。文明の始まりである「炉」と「井戸」の神格です。",
+        voice:"ロ・ワ・ヰ。炉を囲んで、輪を作って、そこに居る。それが集落の始まりだ。" }
+    ]},
+  { dir:"NNW", deg:"337.5°", area:"富士山・シベリア", sounds:["ヱ","ヲ","ン"], color:"#f5e8f0",
+    deities:[
+      { layer:"ten", name:"木花咲耶姫（本来の姿）", reading:"このはなさくやひめ", source:"記紀・ヲシテ",
+        tagline:"一夜で身ごもったと疑われた富士の女神。火の中で産んで証明しました。",
+        detail:"記紀では一夜で身ごもったことを疑われ、火中出産で潔白を証明する物語として描かれています。ヲシテ文献では富士山の本来の女神として、火と花と生命の三つを司る強大な女神とされています。「疑われた」という物語構造自体が、本来の権威を貶める書き換えの痕跡です。",
+        voice:"私は疑われた。しかし火の中で産んだ。あなたが富士を見るとき、私が応える。" },
+      { layer:"chi", name:"富士の地龍", reading:"ふじのちりゅう", source:"宮下文書（富士古文書）",
+        tagline:"宮下文書が伝える、富士山の地下に封じられた火と水の龍神です。",
+        detail:"宮下文書（富士古文書）には富士山の地下に「火と水を司る龍神が封じられている」という記述があります。富士の火山活動はこの龍の呼吸であり、噴火は龍が目覚める時とされています。",
+        voice:"富士が噴くとき、それは私が動く時だ。今はまだ眠っている。しかし長くはない。" },
+      { layer:"umi", name:"ヱ・ヲ・ンの円環神", reading:"えんかんのかみ", source:"カタカムナ音霊",
+        tagline:"カタカムナ48音の最後の三音。終わりと始まりが重なる円環の神格です。",
+        detail:"カタカムナでヱ=得る・重なる、ヲ=緒・男・大きな力、ン=音の終わり・円・縁。この三音は48音の最後であり、終わりと始まりが一致する「円環」の神格です。すべての音霊が戻ってくる場所です。",
+        voice:"ヱ・ヲ・ン。終わりが始まりに戻る。円環が完成する。あなたが今ここにいることが、その証明だ。" }
+    ]}
+];
+
+const blocks = document.getElementById('blocks');
+
+DIRS.forEach((d, di) => {
+  const block = document.createElement('div');
+  block.className = 'direction-block';
+
+  block.innerHTML = `
+    <div class="direction-header" id="dh-${di}" style="background:${d.color}">
+      <span class="dir-badge">${d.dir}</span>
+      <span class="dir-deg">${d.deg}</span>
+      <span class="dir-sounds">${d.sounds.join('・')}</span>
+      <span class="dir-area">${d.area}</span>
+      <span class="dir-toggle" id="dt-${di}">▽ 開く</span>
+    </div>
+    <div class="trinity" id="tr-${di}">
+      <div class="trinity-inner">
+        ${d.deities.map((g, gi) => `
+          <div class="deity-card" id="dc-${di}-${gi}">
+            <span class="deity-layer ${LC[g.layer]}">${LL[g.layer]}</span>
+            <div class="deity-sound">${d.sounds[gi]||''}</div>
+            <div class="deity-sound-meaning">${SM[d.sounds[gi]]||''}</div>
+            <div class="deity-name">${g.name}</div>
+            <div class="deity-reading">${g.reading}</div>
+            <div class="deity-source">${g.source}</div>
+            <div class="deity-tagline">${g.tagline}</div>
+            <div class="deity-detail" id="dd-${di}-${gi}">
+              <p>${g.detail}</p>
+              <div class="deity-voice">${g.voice}</div>
+            </div>
+            <div class="deity-expand" id="de-${di}-${gi}">▽ 詳しく見る</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  blocks.appendChild(block);
+
+  // 方位ヘッダーのクリック
+  document.getElementById(`dh-${di}`).addEventListener('click', function() {
+    const tr = document.getElementById(`tr-${di}`);
+    const dt = document.getElementById(`dt-${di}`);
+    if (tr.style.display === 'block') {
+      tr.style.display = 'none';
+      dt.textContent = '▽ 開く';
+      this.classList.remove('open');
+    } else {
+      tr.style.display = 'block';
+      dt.textContent = '△ 閉じる';
+      this.classList.add('open');
+    }
+  });
+
+  // 各神のクリック
+  d.deities.forEach((g, gi) => {
+    document.getElementById(`dc-${di}-${gi}`).addEventListener('click', function(e) {
+      e.stopPropagation();
+      const dd = document.getElementById(`dd-${di}-${gi}`);
+      const de = document.getElementById(`de-${di}-${gi}`);
+      if (dd.classList.contains('open')) {
+        dd.classList.remove('open');
+        de.textContent = '▽ 詳しく見る';
+      } else {
+        dd.classList.add('open');
+        de.textContent = '△ 閉じる';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
