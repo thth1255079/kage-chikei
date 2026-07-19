@@ -3,396 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>天城守護神鑑定</title>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<title>天城守護神鑑定｜影の地形学</title>
+<meta name="description" content="名前・生年月日・住んできた土地から、天城16方位×48神の中のあなたの守護神を特定する無料鑑定ツール。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f0e6cc;
-    --bg2: #e8d8b0;
-    --gold: #7a5010;
-    --gold-mid: #8b6914;
-    --gold-light: #c8a030;
-    --accent: #2d5a20;
-    --text: #1a0e00;
-    --text-mid: #3a2000;
-    --border: rgba(100,60,10,0.3);
-    --paper: #f5edd8;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --paper:#EEF1F5; --ink:#1D2433; --rock:#0D1424; --rock2:#16203A;
+  --vermilion:#C43D4B; --indigo:#2B5FD9; --line:#D8DDE6; --dim:#68707E; --card:#FFFFFF;
+  --serif:'Shippori Mincho','Hiragino Mincho ProN',serif;
+  --sans:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.9;font-size:15.5px}
 
-  body {
-    background: var(--bg);
-    background-image:
-      radial-gradient(ellipse at 20% 30%, rgba(160,100,20,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 70%, rgba(120,70,10,0.06) 0%, transparent 60%);
-    color: var(--text);
-    font-family: 'Shippori Mincho B1', 'Noto Serif JP', serif;
-    min-height: 100vh;
-    padding: 40px 16px 80px;
-  }
-<a href="https://thth1255079.github.io/tokko/" style="display:block;text-align:center;padding:16px;font-size:12px;color:#7a5010;text-decoration:none;letter-spacing:2px;">← 岩戸ログへ戻る</a>
+.topnav{max-width:640px;margin:0 auto;padding:.9rem 1.2rem 0;display:flex;gap:1.2rem;font-size:.76rem}
+.topnav a{color:var(--dim);text-decoration:none;letter-spacing:.06em;border-bottom:1px solid var(--line);padding-bottom:1px}
+.topnav a:hover{color:var(--vermilion);border-color:var(--vermilion)}
 
-  .header { text-align:center; margin-bottom:40px; }
-  .header-en {
-    font-size:10px; letter-spacing:0.6em; color:var(--gold-mid);
-    margin-bottom:16px; opacity:0.7;
-    font-family:'Noto Serif JP',serif;
-  }
-  .header h1 {
-    font-size:28px; font-weight:800; letter-spacing:0.25em;
-    line-height:1.6; color:var(--text); margin-bottom:12px;
-    font-family:'Shippori Mincho B1',serif;
-    text-shadow: 1px 1px 0 rgba(160,100,10,0.2);
-  }
-  .header-rule {
-    width:1px; height:40px;
-    background:linear-gradient(to bottom,transparent,var(--gold-mid),transparent);
-    margin:16px auto;
-  }
-  .header-sub {
-    font-size:13px; color:var(--text-mid);
-    line-height:2.4; letter-spacing:0.08em;
-  }
+.header{text-align:center;margin:2rem auto 2.2rem;max-width:640px;padding:0 1.2rem}
+.header-en{font-family:var(--mono);font-size:.68rem;letter-spacing:.32em;color:var(--dim)}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(1.7rem,5vw,2.2rem);letter-spacing:.2em;margin:.35rem 0 .6rem}
+.header-sub{font-size:.86rem;color:#4B4F52;max-width:32em;margin:0 auto}
 
-  /* 入力フォーム */
-  .form-wrap { max-width:600px; margin:0 auto 40px; }
+.form-wrap{max-width:640px;margin:0 auto 40px;padding:0 1.2rem}
+.form-intro{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--indigo);
+  border-radius:6px;padding:1.1rem 1.3rem;margin-bottom:1.3rem;font-size:.84rem;color:#3B3F42}
+.form-intro b{font-family:var(--serif);letter-spacing:.06em}
 
-  .form-intro {
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--gold-mid);
-    padding: 20px 22px; margin-bottom:24px; border-radius:2px;
-    font-size:13px; line-height:2.4; color:var(--text-mid);
-    font-family:'Shippori Mincho B1',serif;
-    box-shadow: inset 0 0 40px rgba(160,100,10,0.04);
-  }
+.form-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.6rem 1.4rem}
+.field{margin-bottom:1.6rem}
+.field:last-of-type{margin-bottom:0}
+.field-label{display:block;font-family:var(--serif);font-weight:600;font-size:.95rem;letter-spacing:.1em;margin-bottom:.35rem}
+.field-desc{font-size:.78rem;color:var(--dim);margin-bottom:.55rem}
+.field input{width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;
+  padding:.7rem .85rem;font-family:var(--sans);font-size:.95rem;color:var(--ink)}
+.field input:focus{outline:2px solid var(--indigo);outline-offset:1px;border-color:var(--indigo)}
+.field input::placeholder{color:#A9ADA9;font-size:.85rem}
+.date-row{display:flex;gap:.5rem;align-items:center}
+.date-row input{text-align:center;font-family:var(--mono)}
+.date-sep{color:var(--dim);font-size:.9rem}
 
-  .form-card {
-    background: var(--paper);
-    border: 1px solid var(--border);
-    padding: 28px 24px; border-radius:2px;
-    box-shadow: 0 2px 12px rgba(100,60,10,0.08),
-                inset 0 0 60px rgba(160,100,10,0.03);
-  }
+.place-group{border:1px solid var(--line);border-radius:4px;padding:.85rem 1rem;margin-bottom:.7rem;background:#fff}
+.place-group-title{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--indigo);margin-bottom:.45rem}
+.place-group-title .p-sub{font-weight:400;color:var(--dim);margin-left:.5em;letter-spacing:.02em}
+.place-group input{border:none;padding:.3rem 0;border-bottom:1px solid var(--line);border-radius:0}
+.place-group input:focus{outline:none;border-bottom:2px solid var(--indigo)}
 
-  .field { margin-bottom:28px; }
-  .field:last-child { margin-bottom:0; }
-  .field-label {
-    display:block; font-size:11px; letter-spacing:0.5em;
-    color:var(--gold-mid); font-weight:700; margin-bottom:10px;
-    font-family:'Noto Serif JP',serif;
-  }
-  .field-desc {
-    font-size:12px; color:#5a3a10; margin-bottom:8px;
-    line-height:2.0; letter-spacing:0.05em;
-  }
-  .field input, .field select {
-    width:100%; background: rgba(255,248,236,0.8);
-    border: 1px solid rgba(100,60,10,0.25);
-    border-radius:2px; padding:12px 14px;
-    color:var(--text); font-family:'Shippori Mincho B1',serif;
-    font-size:15px; outline:none;
-    transition:border-color 0.3s, box-shadow 0.3s;
-    letter-spacing:0.05em;
-  }
-  .field input:focus, .field select:focus {
-    border-color:var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(139,105,20,0.1);
-    background:#fff;
-  }
-  .field input::placeholder { color:#a08050; font-size:13px; }
+.invoke-btn{width:100%;padding:1rem;margin-top:1.4rem;background:var(--rock);color:#E8E6E1;
+  border:none;border-radius:4px;font-family:var(--serif);font-size:1rem;letter-spacing:.4em;
+  cursor:pointer;transition:background .2s}
+.invoke-btn:hover{background:#232E4A}
+.invoke-btn:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+.err{display:none;color:var(--vermilion);font-size:.82rem;margin-top:.8rem;text-align:center}
+.err.on{display:block}
 
-  .date-row { display:flex; gap:8px; align-items:center; }
-  .date-sep { color:#7a5010; font-size:16px; font-family:'Shippori Mincho B1',serif; }
-  .date-row input { text-align:center; }
+.loading{display:none;text-align:center;padding:70px 20px}
+.loading.on{display:block}
+.load-circle{width:52px;height:52px;margin:0 auto 24px;border-radius:50%;
+  border:2px solid var(--line);border-top-color:var(--vermilion);animation:spin 1.1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-text{font-family:var(--serif);font-size:.86rem;letter-spacing:.2em;color:var(--dim);line-height:2.6}
 
-  .place-group {
-    background: rgba(255,248,230,0.6);
-    border: 1px solid rgba(100,60,10,0.15);
-    border-radius:2px; padding:16px 18px; margin-bottom:12px;
-  }
-  .place-group-title {
-    font-size:11px; font-weight:700; letter-spacing:0.3em;
-    color:var(--accent); margin-bottom:10px;
-    font-family:'Noto Serif JP',serif;
-  }
+/* ── 結果 ── */
+.result{display:none;max-width:640px;margin:0 auto;padding:0 1.2rem 3rem}
+.result.on{display:block}
+.r-sec{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:1.1rem;overflow:hidden}
+.r-sec-label{font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;color:var(--dim);
+  padding:.85rem 1.3rem 0}
+.r-sec-title{font-family:var(--serif);font-weight:600;font-size:1.12rem;letter-spacing:.08em;
+  padding:.15rem 1.3rem .6rem;border-bottom:1px solid var(--line)}
+.r-sec-body{padding:1rem 1.3rem 1.2rem;font-size:.88rem;color:#3B3F42}
 
-  .invoke-btn {
-    width:100%; padding:18px; margin-top:28px;
-    background: #1a0e00; color:#f0e0b0;
-    border: 1px solid #5a3a00;
-    border-radius:2px;
-    font-family:'Shippori Mincho B1',serif; font-size:16px;
-    letter-spacing:0.5em; cursor:pointer;
-    transition:all 0.3s;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    box-shadow: 0 2px 8px rgba(100,60,10,0.2);
-  }
-  .invoke-btn:hover {
-    background: #2a1800;
-    box-shadow: 0 4px 16px rgba(100,60,10,0.3);
-  }
+.land-dial{display:flex;justify-content:center;padding:1.2rem 0 .4rem;background:var(--rock)}
+.land-dial svg{width:min(260px,72vw);height:auto}
+.land-rows{border-top:1px solid var(--line)}
+.land-row{display:flex;align-items:baseline;gap:.9rem;padding:.7rem 1.3rem;border-bottom:1px solid #E4E4DF;flex-wrap:wrap}
+.land-row:last-child{border-bottom:none}
+.land-kind{font-size:.72rem;color:var(--dim);min-width:6.5em;letter-spacing:.04em}
+.land-name{font-family:var(--serif);font-weight:600;font-size:.95rem;flex:1;min-width:8em}
+.land-deg{font-family:var(--mono);color:var(--indigo);font-weight:500;font-size:.9rem}
+.land-dir{font-family:var(--mono);background:#E8ECF4;color:var(--indigo);border-radius:3px;
+  padding:0 .5em;font-size:.78rem}
+.land-miss{color:var(--vermilion);font-size:.78rem}
 
-  .err { display:none; color:#8b2010; font-size:13px; margin-top:12px; text-align:center; }
-  .err.on { display:block; }
+table.attr{width:100%;border-collapse:collapse;font-size:.86rem}
+table.attr th{width:8.5em;text-align:left;font-weight:500;color:var(--dim);padding:.55rem 1.3rem;
+  background:#F3F3EF;border-bottom:1px solid #E4E4DF;white-space:nowrap;vertical-align:top}
+table.attr td{padding:.55rem 1rem .55rem 0;border-bottom:1px solid #E4E4DF;vertical-align:top}
+table.attr tr:last-child th,table.attr tr:last-child td{border-bottom:none}
+.v-mono{font-family:var(--mono);font-size:.92em}
 
-  /* ローディング */
-  .loading { display:none; text-align:center; padding:80px 20px; }
-  .loading.on { display:block; }
-  .load-circle {
-    width:60px; height:60px; margin:0 auto 32px;
-    border-radius:50%;
-    border:2px solid rgba(100,60,10,0.15);
-    border-top-color:var(--gold-mid);
-    animation:spin 1.2s linear infinite;
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .load-text {
-    font-size:14px; letter-spacing:0.3em; color:#7a5010;
-    line-height:2.6; font-family:'Shippori Mincho B1',serif;
-  }
+.match-items{display:flex;flex-direction:column;gap:.5rem;padding:.2rem 0}
+.match-item{display:flex;align-items:center;gap:.7rem;font-size:.85rem}
+.match-dot{width:.6rem;height:.6rem;border-radius:50%;flex-shrink:0;border:2px solid var(--indigo);background:transparent}
+.match-dot.hit{background:var(--indigo)}
+.match-msg{font-family:var(--serif);font-weight:600;font-size:.92rem;margin-bottom:.6rem;color:var(--ink)}
 
-  /* 結果 */
-  .result { display:none; max-width:600px; margin:0 auto; }
-  .result.on { display:block; }
+.reveal-lead{text-align:center;font-family:var(--serif);font-size:.95rem;letter-spacing:.1em;
+  color:var(--dim);margin:1.8rem 0 1rem}
+.guardian{background:var(--rock);color:#E8E6E1;border-radius:6px;text-align:center;
+  padding:2.6rem 1.5rem 2.2rem;margin-bottom:1.1rem;border-top:4px solid var(--vermilion)}
+.guardian-label{font-family:var(--mono);font-size:.66rem;letter-spacing:.4em;color:#9BA0A6;margin-bottom:1rem}
+.guardian-name{font-family:var(--serif);font-weight:800;font-size:clamp(1.9rem,7vw,2.5rem);
+  letter-spacing:.18em;line-height:1.4;margin-bottom:.4rem;color:#F2F0EC}
+.guardian-reading{font-size:.82rem;letter-spacing:.3em;color:#B9BDC2;margin-bottom:.5rem}
+.guardian-source{font-family:var(--mono);font-size:.68rem;color:#8A8F95;letter-spacing:.12em;margin-bottom:1rem}
+.guardian-tagline{font-family:var(--serif);font-size:.9rem;line-height:2.2;color:#D8D6D1;max-width:26em;margin:0 auto}
+.guardian-meta{margin-top:1.2rem;display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.g-chip{font-family:var(--mono);font-size:.7rem;border:1px solid #54595F;border-radius:3px;padding:.05rem .6rem;color:#B9BDC2}
 
-  /* 守護神ヘッダー */
-  .guardian-header {
-    background: linear-gradient(135deg, #1a0e00 0%, #2a1800 50%, #1a0e00 100%);
-    color:#f0e0b0;
-    padding:48px 28px; text-align:center;
-    border-radius:2px 2px 0 0;
-    border: 1px solid #5a3a00;
-    border-bottom: none;
-    position:relative;
-    overflow:hidden;
-  }
-  .guardian-header::before {
-    content:'';
-    position:absolute; inset:0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,160,48,0.15) 0%, transparent 70%);
-  }
-  .guardian-label {
-    font-size:10px; letter-spacing:0.6em; color:#c8a030;
-    margin-bottom:20px; font-family:'Noto Serif JP',serif;
-    opacity:0.9;
-  }
-  .guardian-name {
-    font-size:38px; font-weight:800; letter-spacing:0.25em;
-    line-height:1.4; margin-bottom:10px;
-    color:#f5e8c0;
-    font-family:'Shippori Mincho B1',serif;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 20px rgba(200,160,48,0.2);
-  }
-  .guardian-reading {
-    font-size:13px; letter-spacing:0.5em; color:#c8a030;
-    margin-bottom:8px; font-family:'Noto Serif JP',serif;
-  }
-  .guardian-source {
-    font-size:11px; color:#8a7050; margin-bottom:18px;
-    letter-spacing:0.2em;
-  }
-  .guardian-tagline {
-    font-size:14px; line-height:2.4; color:#d4c090;
-    font-family:'Shippori Mincho B1',serif; letter-spacing:0.06em;
-  }
+.god-voice{background:var(--rock);color:#E8E6E1;border-radius:6px;padding:1.9rem 1.5rem;
+  text-align:center;margin-bottom:1.1rem;border-left:4px solid var(--vermilion)}
+.god-voice-label{font-family:var(--mono);font-size:.66rem;letter-spacing:.4em;color:#9BA0A6;margin-bottom:1.1rem}
+.god-voice-text{font-family:var(--serif);font-size:1.02rem;line-height:2.7;letter-spacing:.08em;color:#EDEBE6}
 
-  /* 3つの方位 */
-  .three-layers {
-    display:grid; grid-template-columns:1fr 1fr 1fr;
-    border:1px solid var(--border); border-top:none;
-    background:var(--paper);
-  }
-  .layer-block {
-    padding:20px 16px; text-align:center;
-    border-right:1px solid var(--border);
-  }
-  .layer-block:last-child { border-right:none; }
-  .layer-icon { font-size:20px; margin-bottom:8px; }
-  .layer-type {
-    font-size:10px; letter-spacing:0.3em; color:var(--accent);
-    font-weight:700; margin-bottom:6px;
-    font-family:'Noto Serif JP',serif;
-  }
-  .layer-place { font-size:11px; color:#5a3a10; margin-bottom:6px; }
-  .layer-dir {
-    font-size:22px; font-weight:800; color:var(--text);
-    margin-bottom:4px; font-family:'Shippori Mincho B1',serif;
-  }
-  .layer-deg { font-size:11px; color:var(--gold-mid); }
+.cta{background:var(--card);border:1px solid var(--line);border-radius:6px;text-align:center;
+  padding:1.8rem 1.4rem;margin-bottom:1.1rem}
+.cta-title{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:.08em;margin-bottom:.5rem}
+.cta-desc{font-size:.83rem;color:#4B4F52;max-width:30em;margin:0 auto 1.1rem}
+.btn-cta{display:inline-block;padding:.85rem 2.4rem;background:var(--vermilion);color:#fff;
+  text-decoration:none;font-family:var(--serif);font-size:.92rem;letter-spacing:.28em;border-radius:4px;transition:background .2s}
+.btn-cta:hover{background:#A3313E}
+.cta-sub{margin-top:.9rem;font-size:.78rem}
+.cta-sub a{color:var(--indigo)}
 
-  /* 解説セクション */
-  .detail-sections {
-    border:1px solid var(--border); border-top:none;
-    background:var(--paper);
-  }
-  .detail-sec {
-    padding:24px 24px;
-    border-bottom:1px solid rgba(100,60,10,0.08);
-  }
-  .detail-sec:last-child { border-bottom:none; }
-  .detail-sec-label {
-    font-size:10px; letter-spacing:0.5em; color:var(--gold-mid);
-    font-weight:700; margin-bottom:14px;
-    font-family:'Noto Serif JP',serif;
-    padding-bottom:8px;
-    border-bottom:1px solid rgba(139,105,20,0.2);
-  }
-  .detail-sec-text {
-    font-size:14px; line-height:2.6; color:var(--text-mid);
-    font-family:'Shippori Mincho B1',serif; letter-spacing:0.04em;
-  }
+.reset-btn{display:block;width:fit-content;margin:1.6rem auto 0;padding:.6rem 2.2rem;background:transparent;
+  border:1px solid var(--line);border-radius:4px;color:var(--dim);font-family:var(--serif);
+  font-size:.85rem;letter-spacing:.3em;cursor:pointer;transition:all .2s}
+.reset-btn:hover{border-color:var(--vermilion);color:var(--vermilion)}
 
-  /* 神からのことば */
-  .god-voice {
-    background: linear-gradient(135deg, #1a0e00 0%, #2a1800 100%);
-    color:#f0e0b0;
-    padding:36px 28px;
-    border-radius:0 0 2px 2px;
-    text-align:center;
-    border:1px solid #5a3a00;
-    border-top:none;
-  }
-  .god-voice-label {
-    font-size:10px; letter-spacing:0.6em; color:#c8a030;
-    margin-bottom:20px; font-family:'Noto Serif JP',serif;
-  }
-  .god-voice-text {
-    font-size:17px; line-height:3.0; color:#f0e0b0;
-    font-style:italic; font-family:'Shippori Mincho B1',serif;
-    letter-spacing:0.1em;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  }
-
-  /* 整合性 */
-  .match-bar {
-    padding:20px 24px; background:var(--paper);
-    border:1px solid var(--border); border-top:none;
-  }
-  .match-label {
-    font-size:10px; letter-spacing:0.5em; color:var(--gold-mid);
-    font-weight:700; margin-bottom:14px;
-    font-family:'Noto Serif JP',serif;
-  }
-  .match-items { display:flex; flex-direction:column; gap:8px; }
-  .match-item {
-    display:flex; align-items:center; gap:10px;
-    font-size:13px; color:var(--text-mid);
-    font-family:'Shippori Mincho B1',serif;
-  }
-  .match-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .match-dot.hit { background:#2d6a20; }
-  .match-dot.partial { background:#c8a030; }
-  .match-dot.miss { background:#b09060; }
-
-  .reset-btn {
-    display:block; width:fit-content; margin:32px auto 0;
-    padding:12px 36px; background:transparent;
-    border:1px solid var(--border); border-radius:2px;
-    color:#7a5010; font-family:'Shippori Mincho B1',serif;
-    font-size:13px; letter-spacing:0.4em; cursor:pointer;
-    transition:all 0.3s;
-  }
-  .reset-btn:hover { border-color:var(--gold-mid); color:var(--gold-mid); }
-
-  /* 五行×守護の理由 */
-  .gogyo-reason {
-    background: var(--paper);
-    border:1px solid var(--border); border-top:none;
-    padding:20px 24px;
-    display:flex; align-items:flex-start; gap:16px;
-  }
-  .gogyo-badge {
-    display:inline-flex; align-items:center; justify-content:center;
-    width:44px; height:44px; flex-shrink:0;
-    background:#1a0e00; color:#c8a030;
-    font-size:18px; font-weight:800;
-    font-family:'Shippori Mincho B1',serif;
-    border:1px solid #5a3a00;
-    border-radius:2px;
-    letter-spacing:0;
-  }
-  .gogyo-text {
-    font-size:13px; line-height:2.4; color:var(--text-mid);
-    font-family:'Shippori Mincho B1',serif;
-    letter-spacing:0.05em;
-  }
-
-  @media(max-width:500px){
-    .three-layers { grid-template-columns:1fr; }
-    .layer-block { border-right:none; border-bottom:1px solid var(--border); }
-    .guardian-name { font-size:28px; }
-  }
+.sector16{fill:var(--rock2);stroke:var(--rock);stroke-width:1}
+.sector16.main{fill:var(--vermilion)}
+.dial-lab{font-family:var(--mono);font-size:10px;fill:#9BA0A6;text-anchor:middle}
+.dial-lab.main{fill:#FFD9CF}
+.bear-line{stroke-width:2;stroke-linecap:round}
+.bear-lab{font-size:11px;text-anchor:middle;font-family:var(--sans)}
 </style>
 </head>
 <body>
 
+<nav class="topnav">
+  <a href="index.html">← 影の地形学トップ</a>
+  <a href="amagi-48-shin.html">四十八神一覧</a>
+  <a href="https://thth1255079.github.io/tokko/">陽光文明同好会</a>
+</nav>
+
 <div class="header">
   <p class="header-en">AMAGI GUARDIAN KAMI READING</p>
   <h1>天城守護神鑑定</h1>
-  <div class="header-rule"></div>
-  <p class="header-sub">
-    あなたの名前・生年月日・3つの土地から<br>
-    天城16方位×48神の中の、あなたの守護神を特定します。
-  </p>
+  <p class="header-sub">名前・生年月日・住んできた土地。<br>その三つから、あなたの守護神を特定します。</p>
 </div>
 
 <div class="form-wrap">
   <div class="form-intro">
-    <strong>この鑑定について</strong><br>
-    3つの情報を組み合わせて守護神を特定します。<br><br>
-    ①<strong>名前の音霊</strong>——名前の最初の音がカタカムナ48音のどれに対応するかで、あなたが持って生まれた神との縁を読みます。<br><br>
-    ②<strong>生年月日の五行</strong>——干支の五行（木・火・土・金・水）から、天・地・海のどの層の神と繋がっているかを読みます。<br><br>
-    ③<strong>3つの土地の方位</strong>——天城山からの大円航路方位角を計算して、どの方位の神と接続しているかを読みます。これら3つが重なった神があなたの守護神です。
+    <b>入力はこれだけです。</b><br>
+    むずかしい知識は要りません。あなたの名前、生まれた年、そして住んできた土地——それぞれが持っている「事実」を、天城山を原点とする方位体系に重ねます。結果はまず、あなたの土地が語っている事実からお見せします。
   </div>
 
   <div class="form-card" id="formCard">
     <div class="field">
-      <label class="field-label">お名前（ひらがなで）</label>
-      <p class="field-desc">姓名どちらでも、ひらがなで入力してください。最初の一文字の音霊を使います。</p>
-      <input type="text" id="nameInput" placeholder="例：やまだ　みほ">
+      <label class="field-label" for="nameInput">お名前</label>
+      <p class="field-desc">姓名どちらでも。ひらがなで入力してください（最初の一音を使います）。</p>
+      <input type="text" id="nameInput" placeholder="例：やまだ　みほ" autocomplete="off">
     </div>
 
     <div class="field">
       <label class="field-label">生年月日</label>
       <div class="date-row">
-        <input type="number" id="byear" placeholder="年" min="1900" max="2010" style="width:90px">
+        <input type="number" id="byear" placeholder="1985" min="1900" max="2020" style="width:92px" inputmode="numeric">
         <span class="date-sep">年</span>
-        <input type="number" id="bmonth" placeholder="月" min="1" max="12" style="width:70px">
+        <input type="number" id="bmonth" placeholder="6" min="1" max="12" style="width:64px" inputmode="numeric">
         <span class="date-sep">月</span>
-        <input type="number" id="bday" placeholder="日" min="1" max="31" style="width:70px">
+        <input type="number" id="bday" placeholder="15" min="1" max="31" style="width:64px" inputmode="numeric">
         <span class="date-sep">日</span>
       </div>
     </div>
 
     <div class="field">
-      <label class="field-label">3つの土地</label>
-      <p class="field-desc">天城山からの方位を計算します。都道府県＋市区町村まで入力してください。気になる地がない場合は空欄で大丈夫です。</p>
-
+      <label class="field-label">住んできた土地</label>
+      <p class="field-desc">都道府県から市区町村まで入力してください（例：千葉県習志野市）。</p>
       <div class="place-group">
-        <div class="place-group-title">🌱 生まれた地（魂の出発点）</div>
-        <input type="text" id="place1" placeholder="例：東京都豊島区西巣鴨">
+        <div class="place-group-title">生まれた地<span class="p-sub">魂の出発点</span></div>
+        <input type="text" id="place1" placeholder="例：東京都豊島区" autocomplete="off">
       </div>
       <div class="place-group">
-        <div class="place-group-title">🏠 現在住んでいる地（今ともに動く神）</div>
-        <input type="text" id="place2" placeholder="例：千葉県習志野市鷺沼">
+        <div class="place-group-title">いま住んでいる地<span class="p-sub">今ともに動く神</span></div>
+        <input type="text" id="place2" placeholder="例：千葉県習志野市" autocomplete="off">
       </div>
       <div class="place-group">
-        <div class="place-group-title">✨ 気になって仕方ない地（呼ばれている神）</div>
-        <input type="text" id="place3" placeholder="例：島根県出雲市　（なければ空欄）">
+        <div class="place-group-title">気になって仕方ない地<span class="p-sub">呼ばれている方位（なければ空欄）</span></div>
+        <input type="text" id="place3" placeholder="例：島根県出雲市" autocomplete="off">
       </div>
     </div>
 
-    <button class="invoke-btn" onclick="startReading()">― 守護神を特定する ―</button>
+    <button class="invoke-btn" onclick="startReading()">守護神を特定する</button>
     <p class="err" id="errMsg">名前・生年月日・生まれた地は必須です。</p>
   </div>
 
   <div class="loading" id="loading">
     <div class="load-circle"></div>
-    <p class="load-text" id="loadText">
-      天城山から方位を計算しています…<br>
-      カタカムナ音霊と照合しています…<br>
-      48神の中から守護神を探しています…
+    <p class="load-text">
+      天城山からの方位を計算しています…<br>
+      音霊と五行を照合しています…
     </p>
   </div>
 </div>
@@ -400,8 +216,6 @@
 <div class="result" id="result"></div>
 
 <script>
-// ━━ データ ━━
-
 // カタカムナ音霊→方位・層
 const SOUND_DIR = {
   "ア":"N","イ":"N","ウ":"N","エ":"NNE","オ":"NNE","カ":"NNE",
@@ -559,36 +373,6 @@ const GOGYO_VOICE = {
   "金":"あなたの金の気が、私を研ぎ澄ませた。",
   "土":"あなたの土の気が、私を地上に戻した。"
 };
-
-// 年→十干→五行
-function yearToGogyo(year) {
-  const kans = ["庚","辛","壬","癸","甲","乙","丙","丁","戊","己"];
-  const gogyos = ["金","金","水","水","木","木","火","火","土","土"];
-  const idx = (year - 0) % 10;
-  const adjustedIdx = ((year - 4) % 10 + 10) % 10;
-  const kanNames = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
-  const kanGogyos = ["木","木","火","火","土","土","金","金","水","水"];
-  return { kan: kanNames[adjustedIdx], gogyo: kanGogyos[adjustedIdx] };
-}
-
-// 天城からの大円方位角
-function bearing(lat2, lon2) {
-  const lat1 = 34.92 * Math.PI / 180;
-  const lon1 = 139.02 * Math.PI / 180;
-  const lat2r = lat2 * Math.PI / 180;
-  const lon2r = lon2 * Math.PI / 180;
-  const dlon = lon2r - lon1;
-  const x = Math.sin(dlon) * Math.cos(lat2r);
-  const y = Math.cos(lat1) * Math.sin(lat2r) - Math.sin(lat1) * Math.cos(lat2r) * Math.cos(dlon);
-  const b = Math.atan2(x, y) * 180 / Math.PI;
-  return (b + 360) % 360;
-}
-
-function degToDir(deg) {
-  const dirs = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
-  return dirs[Math.round(deg / 22.5) % 16];
-}
-
 // 48神データ（方位×層）
 const KAMI_DATA = {
   "N":  { ten:{name:"天御祖神",reading:"あめのみおやのかみ",source:"竹内文書",tagline:"宇宙創造以前から存在した、記紀が消した最古の神です。",detail:"竹内文書では、天之御中主神よりさらに前に存在した宇宙の根源神として記録されています。記紀編纂の際に政治的な理由で完全に削除されました。あなたがこの神と縁を持つということは、記録される以前の「始まり」に魂の起点があることを意味します。",voice:"私は始まりより前にいた。名前すら与えられなかった。あなたが問う今、初めて答える。"},
@@ -641,320 +425,239 @@ const KAMI_DATA = {
         umi:{name:"ヱ・ヲ・ンの円環神",reading:"えんかんのかみ",source:"カタカムナ音霊",tagline:"カタカムナ48音の最後の三音。終わりと始まりが重なる円環の神格です。",detail:"カタカムナでヱ=得る・重なる、ヲ=緒・男・大きな力、ン=音の終わり・円・縁。この三音は48音の最後であり、終わりと始まりが一致する「円環」の神格です。",voice:"ヱ・ヲ・ン。終わりが始まりに戻る。円環が完成する。あなたが今ここにいることが、その証明だ。"} }
 };
 
-// ━━ ジオコーディング（Nominatim） ━━
+// ━━ 計算 ━━
+
+// 年→十干→五行
+function yearToGogyo(year) {
+  const adjustedIdx = ((year - 4) % 10 + 10) % 10;
+  const kanNames  = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+  const kanGogyos = ["木","木","火","火","土","土","金","金","水","水"];
+  return { kan: kanNames[adjustedIdx], gogyo: kanGogyos[adjustedIdx] };
+}
+
+// 天城山（34.920N / 139.018E）からの大円方位角
+const AMAGI = { lat: 34.920, lon: 139.018 };
+function bearing(lat2, lon2) {
+  const lat1 = AMAGI.lat * Math.PI / 180;
+  const lon1 = AMAGI.lon * Math.PI / 180;
+  const lat2r = lat2 * Math.PI / 180;
+  const lon2r = lon2 * Math.PI / 180;
+  const dlon = lon2r - lon1;
+  const x = Math.sin(dlon) * Math.cos(lat2r);
+  const y = Math.cos(lat1) * Math.sin(lat2r) - Math.sin(lat1) * Math.cos(lat2r) * Math.cos(dlon);
+  return (Math.atan2(x, y) * 180 / Math.PI + 360) % 360;
+}
+const DIRS16 = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+function degToDir(deg) { return DIRS16[Math.round(deg / 22.5) % 16]; }
+
+// ━━ ジオコーディング（Nominatim / OpenStreetMap） ━━
 async function geocode(place) {
   if (!place.trim()) return null;
   try {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1&accept-language=ja`;
-    const res = await fetch(url, { headers: { 'User-Agent': 'amagi-guardian-reading/1.0' } });
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1&accept-language=ja&countrycodes=jp`;
+    const res = await fetch(url);
     const data = await res.json();
     if (data.length > 0) {
-      return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name: data[0].display_name };
+      return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
     }
   } catch(e) {}
-  return null;
+  return "FAIL"; // 見つからない／通信失敗を明示的に区別する
 }
 
 // ━━ メイン処理 ━━
 async function startReading() {
   const name = document.getElementById('nameInput').value.trim();
   const year = parseInt(document.getElementById('byear').value);
-  const month = parseInt(document.getElementById('bmonth').value);
-  const day = parseInt(document.getElementById('bday').value);
   const place1 = document.getElementById('place1').value.trim();
   const place2 = document.getElementById('place2').value.trim();
   const place3 = document.getElementById('place3').value.trim();
   const err = document.getElementById('errMsg');
 
-  if (!name || !year || !month || !day || !place1) {
-    err.classList.add('on'); return;
-  }
+  if (!name || !year || !place1) { err.textContent = "名前・生年月日・生まれた地は必須です。"; err.classList.add('on'); return; }
   err.classList.remove('on');
 
   document.getElementById('formCard').style.display = 'none';
   document.getElementById('loading').classList.add('on');
 
-  // ジオコーディング
   const [geo1, geo2, geo3] = await Promise.all([
-    geocode(place1), geocode(place2), place3 ? geocode(place3) : Promise.resolve(null)
+    geocode(place1),
+    place2 ? geocode(place2) : Promise.resolve(null),
+    place3 ? geocode(place3) : Promise.resolve(null)
   ]);
 
-  // 方位計算
-  const dir1 = geo1 ? degToDir(bearing(geo1.lat, geo1.lon)) : "N";
-  const dir2 = geo2 ? degToDir(bearing(geo2.lat, geo2.lon)) : null;
-  const dir3 = geo3 ? degToDir(bearing(geo3.lat, geo3.lon)) : null;
-  const deg1 = geo1 ? bearing(geo1.lat, geo1.lon).toFixed(1) : null;
-  const deg2 = geo2 ? bearing(geo2.lat, geo2.lon).toFixed(1) : null;
-  const deg3 = geo3 ? bearing(geo3.lat, geo3.lon).toFixed(1) : null;
+  // 生まれた地が特定できなければ、代用せず正直にエラーを返す
+  if (!geo1 || geo1 === "FAIL") {
+    document.getElementById('loading').classList.remove('on');
+    document.getElementById('formCard').style.display = 'block';
+    err.textContent = `「${place1}」の位置が特定できませんでした。「都道府県＋市区町村」の表記でもう一度お試しください。`;
+    err.classList.add('on');
+    return;
+  }
+
+  const mk = g => (g && g !== "FAIL") ? { deg: bearing(g.lat, g.lon), dir: degToDir(bearing(g.lat, g.lon)) } : null;
+  const b1 = mk(geo1);
+  const b2 = mk(geo2);
+  const b3 = mk(geo3);
+  const fail2 = geo2 === "FAIL", fail3 = geo3 === "FAIL";
 
   // 名前→音霊
-  const firstChar = name.replace(/\s/g,'')[0];
-  const katakana = KANA_MAP[firstChar] || "ア";
+  const firstChar = name.replace(/[\s　]/g,'')[0];
+  const katakana = KANA_MAP[firstChar] || (SOUND_DIR[firstChar] ? firstChar : "ア");
   const soundDir = SOUND_DIR[katakana] || "N";
-  const soundLayer = SOUND_LAYER[katakana] || "ten";
 
   // 生年→五行→層
   const { kan, gogyo } = yearToGogyo(year);
   const gogyoLayer = GOGYO_LAYER[gogyo];
 
-  // 守護神決定ロジック
-  // 優先度：生まれた地の方位 × 五行の層 → 守護神確定
-  // 一致チェック
-  const mainDir = dir1;
+  // 守護神決定：生まれた地の方位 × 五行の層
+  const mainDir = b1.dir;
   const mainLayer = gogyoLayer;
-  const guardian = KAMI_DATA[mainDir]?.[mainLayer] || KAMI_DATA["N"]["ten"];
-
-  // 整合性チェック
-  const soundMatch = soundDir === mainDir;
-  const placeMatch2 = dir2 ? dir2 === mainDir : null;
-  const placeMatch3 = dir3 ? dir3 === mainDir : null;
+  const guardian = KAMI_DATA[mainDir][mainLayer];
 
   document.getElementById('loading').classList.remove('on');
-
-  // ━━ AI：鑑定メッセージ ━━
-  const aiPrompt = `あなたは「天城16方位×48神」という独自の鑑定システムを使う鑑定師です。
-
-以下の鑑定結果をもとに、この人だけへのメッセージを書いてください。
-
-【依頼者情報】
-- 名前：${name}
-- 生年月日：${year}年${month}月${day}日
-- 五行：${kan}（${gogyo}）
-
-【守護神】
-- 神名：${guardian.name}（${guardian.reading}）
-- 方位：${mainDir}（${deg1}°）
-- 層：${LAYER_NAMES[mainLayer]}
-- 典拠：${guardian.source}
-- 神格：${guardian.detail}
-
-【土地の方位】
-- 生まれた地（${place1}）：${mainDir}方位
-${dir2 ? `- 現在地（${place2}）：${dir2}方位` : ''}
-${dir3 ? `- 気になる地（${place3}）：${dir3}方位` : ''}
-
-【名前の音霊】
-- 最初の音：${katakana}（${SOUND_MEANINGS[katakana]}）
-- 対応方位：${soundDir}
-
-以下の形式でJSONのみ返してください（説明不要、バッククォート不要）：
-{
-  "born_reading": "生まれた地（${place1}）の地形・地脈・歴史的意味を50字でですます調で",
-  "now_reading": "${dir2 ? `現在地（${place2}）の意味を50字でですます調で` : 'null'}",
-  "call_reading": "${dir3 ? `気になる地（${place3}）が示す意味を50字でですます調で` : 'null'}",
-  "sound_reading": "名前の音「${katakana}」（${SOUND_MEANINGS[katakana]}）がこの人に示す意味を40字でですます調で",
-  "total_message": "守護神・五行・音霊・土地を統合したこの人だけへのメッセージ。200字程度。ですます調。詩的に。",
-  "action": "この守護神と繋がるための具体的なアクション（場所・行動）。50字以内。"
-}`;
-
-  // ━━ AI：神からのことば（別コール・一人称） ━━
-  const gogyoDesc = {
-    '水': { nature:'流れ・浸透・根源', reason:'水は万物の根源に宿り、私の力と共鳴する' },
-    '火': { nature:'情熱・変革・輝き', reason:'火は変革を司り、私が封じられた理由と重なる' },
-    '木': { nature:'成長・柔軟・生命力', reason:'木は天へ向かって伸び、私の方位と繋がっている' },
-    '金': { nature:'鋭さ・純化・意志', reason:'金は不純を削ぎ落とし、私が本来持つ力と同じ性質を持つ' },
-    '土': { nature:'安定・受容・育み', reason:'土は万物を受け取り、私が地層の奥に宿る理由と同じだ' },
-  }[gogyo] || { nature:'根源の力', reason:'あなたの本質が私を呼んだ' };
-
-  const voicePrompt = `あなたは今、「${guardian.name}」という神そのものです。
-
-この神について：
-- 典拠：${guardian.source}
-- 神格・本質：${guardian.detail}
-- 封じられた経緯：${guardian.tagline}
-
-「${name}」さんの属性：
-- 五行：${gogyo}（${gogyoDesc.nature}）
-- 生まれた地：${place1}
-- 音霊：${katakana}（${SOUND_MEANINGS[katakana]}）
-
-この神として、今はじめて名前を呼んでくれた「${name}」さんに直接語りかけてください。
-
-必ず含めること：
-①「${name}」という名前を呼ぶ
-②${gogyo}の属性を持つあなたが、私（この神）を呼んだという理由を自然に語る
-③生まれた地「${place1}」の土地の記憶に言及する
-④1300年以上、誰にも気づかれず待っていたという感覚
-
-文体：静かで深い。体言止めを使う。80〜120字。
-JSONや記号は一切使わず、神の言葉だけをそのまま返してください。`;
-
-  // ━━ AI：鑑定メッセージのみ生成 ━━
-  let aiResult = null;
-  let aiVoice = null;
-
-  const callAPI = async (prompt, maxTokens) => {
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: maxTokens,
-          messages: [{ role: "user", content: prompt }]
-        })
-      });
-      if (!res.ok) return null;
-      const data = await res.json();
-      if (!data || !data.content) return null;
-      return data.content.map(i => i.text || '').join('').trim();
-    } catch(e) {
-      return null;
-    }
-  };
-
-  const raw1 = await callAPI(aiPrompt, 800);
-
-  if (raw1) {
-    try {
-      const cleaned = raw1.replace(/```json|```/g, '');
-      const m = cleaned.match(/\{[\s\S]*\}/);
-      if (m) aiResult = JSON.parse(m[0]);
-    } catch(e) {}
-  }
-
   renderResult({
     name, katakana, kan, gogyo, gogyoLayer,
-    soundDir, soundLayer, soundMatch,
-    place1, place2, place3,
-    dir1, dir2, dir3, deg1, deg2, deg3,
-    mainDir, mainLayer, guardian,
-    placeMatch2, placeMatch3, aiResult, aiVoice
+    soundDir, soundMatch: soundDir === mainDir,
+    place1, place2, place3, b1, b2, b3, fail2, fail3,
+    mainDir, mainLayer, guardian
   });
 }
 
+// ━━ 方位盤SVG（結果用：土地の方位を線で示す） ━━
+function landDialSVG(d) {
+  const cx=140, cy=140, r1=44, r2=104, rl=120;
+  let s = `<svg viewBox="0 0 280 280" role="img" aria-label="天城からの方位盤">`;
+  DIRS16.forEach((dir,i)=>{
+    const a0=(i*22.5-11.25-90)*Math.PI/180, a1=(i*22.5+11.25-90)*Math.PI/180;
+    const p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+    const [x0,y0]=p(r2,a0),[x1,y1]=p(r2,a1),[x2,y2]=p(r1,a1),[x3,y3]=p(r1,a0);
+    s += `<path class="sector16${dir===d.mainDir?' main':''}" d="M${x0},${y0} A${r2},${r2} 0 0 1 ${x1},${y1} L${x2},${y2} A${r1},${r1} 0 0 0 ${x3},${y3} Z"/>`;
+    const am=(i*22.5-90)*Math.PI/180, [lx,ly]=p(rl,am);
+    s += `<text class="dial-lab${dir===d.mainDir?' main':''}" x="${lx}" y="${ly+3.5}">${dir}</text>`;
+  });
+  const lands = [
+    d.b1 ? {b:d.b1, c:"#E0866F", t:"生"} : null,
+    d.b2 ? {b:d.b2, c:"#7FA3C8", t:"今"} : null,
+    d.b3 ? {b:d.b3, c:"#C9C48A", t:"呼"} : null
+  ].filter(Boolean);
+  lands.forEach(l=>{
+    const a=(l.b.deg-90)*Math.PI/180;
+    const x=cx+(r2+2)*Math.cos(a), y=cy+(r2+2)*Math.sin(a);
+    s += `<line class="bear-line" stroke="${l.c}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+    const mx=cx+(r1+ (r2-r1)/2 )*Math.cos(a), my=cy+(r1+(r2-r1)/2)*Math.sin(a);
+    s += `<circle cx="${mx}" cy="${my}" r="9" fill="#0A101D" stroke="${l.c}" stroke-width="1.5"/>`;
+    s += `<text class="bear-lab" fill="${l.c}" x="${mx}" y="${my+3.5}">${l.t}</text>`;
+  });
+  s += `<circle cx="${cx}" cy="${cy}" r="${r1-6}" fill="#0A101D"/>`;
+  s += `<text x="${cx}" y="${cy+5}" text-anchor="middle" fill="#E8E6E1" font-size="17" style="font-family:var(--serif);letter-spacing:.1em">天城</text>`;
+  s += `</svg>`;
+  return s;
+}
+
+// ━━ 結果描画（体感先行：土地の事実 → あなたの属性 → 接続 → 守護神開示） ━━
 function renderResult(d) {
   const res = document.getElementById('result');
 
-  // 48パターン定型文 + 五行守護理由を組み合わせる
-  const kamiVoiceBase = KAMI_VOICE[d.mainDir]?.[d.mainLayer] || d.guardian.voice;
-  const gogyoVoice = GOGYO_VOICE[d.gogyo] || '';
-  const voiceText = gogyoVoice + '\n' + kamiVoiceBase;
+  const landRow = (kind, place, b, failed) => {
+    if (!place) return "";
+    if (failed) return `<div class="land-row"><span class="land-kind">${kind}</span><span class="land-name">${place}</span><span class="land-miss">位置を特定できませんでした（計算から除外）</span></div>`;
+    return `<div class="land-row">
+      <span class="land-kind">${kind}</span>
+      <span class="land-name">${place}</span>
+      <span class="land-deg">${b.deg.toFixed(1)}°</span>
+      <span class="land-dir">${b.dir}</span>
+    </div>`;
+  };
 
-  // 一致度の判定
   const matches = [
-    { label:`名前の音霊（${d.katakana}）の方位：${d.soundDir}`, hit: d.soundMatch },
-    { label:`生まれた地（${d.place1}）の方位：${d.dir1}`, hit: true },
-    d.dir2 ? { label:`現在地（${d.place2}）の方位：${d.dir2}`, hit: d.dir2===d.mainDir } : null,
-    d.dir3 ? { label:`気になる地（${d.place3}）の方位：${d.dir3}`, hit: d.dir3===d.mainDir } : null,
+    { label:`生まれた地（${d.place1}）の方位 ${d.b1.dir}`, hit:true },
+    { label:`名前の一音「${d.katakana}」の方位 ${d.soundDir}`, hit:d.soundMatch },
+    d.b2 ? { label:`いま住む地（${d.place2}）の方位 ${d.b2.dir}`, hit:d.b2.dir===d.mainDir } : null,
+    d.b3 ? { label:`気になる地（${d.place3}）の方位 ${d.b3.dir}`, hit:d.b3.dir===d.mainDir } : null
   ].filter(Boolean);
-
   const matchCount = matches.filter(m=>m.hit).length;
-  const matchMsg = matchCount >= 3 ? "非常に強い接続——複数の軸が同じ神を示しています。" :
-                   matchCount === 2 ? "明確な接続——二つの軸が守護神を指しています。" :
-                   "接続が始まっています——この神があなたを待っています。";
+  const matchMsg = matchCount >= 3 ? "複数の軸が同じ方位を指しています。強い接続です。" :
+                   matchCount === 2 ? "二つの軸が同じ方位を指しています。明確な接続です。" :
+                   "接続が始まっています。この方位の神があなたを待っています。";
+
+  const voiceText = (GOGYO_VOICE[d.gogyo] || '') + '\n' + (KAMI_VOICE[d.mainDir]?.[d.mainLayer] || d.guardian.voice);
 
   res.innerHTML = `
-    <div class="guardian-header">
-      <p class="guardian-label">あなたの守護神</p>
+    <div class="r-sec">
+      <p class="r-sec-label">01 — LAND</p>
+      <p class="r-sec-title">まず、土地の事実から。</p>
+      <div class="land-dial">${landDialSVG(d)}</div>
+      <div class="land-rows">
+        ${landRow("生まれた地", d.place1, d.b1, false)}
+        ${landRow("いま住む地", d.place2, d.b2, d.fail2)}
+        ${landRow("気になる地", d.place3, d.b3, d.fail3)}
+      </div>
+      <div class="r-sec-body">
+        あなたが生まれた${d.place1}は、天城山から見て<b>${d.b1.deg.toFixed(1)}°——${d.b1.dir}の方位帯</b>にあります。これは解釈ではなく、大円航路で計算した角度です。ここから読み始めます。
+      </div>
+    </div>
+
+    <div class="r-sec">
+      <p class="r-sec-label">02 — YOU</p>
+      <p class="r-sec-title">あなたが持って生まれたもの。</p>
+      <table class="attr">
+        <tr><th>名前の一音</th><td>「${d.katakana}」——カタカムナで<b>${SOUND_MEANINGS[d.katakana]}</b>。対応方位は<span class="v-mono">${d.soundDir}</span>です。</td></tr>
+        <tr><th>生まれ年の五行</th><td><span class="v-mono">${d.kan}</span>年、五行は<b>「${d.gogyo}」</b>。${LAYER_NAMES[d.gogyoLayer]}の層に対応します。</td></tr>
+        <tr><th>層のことば</th><td>${LAYER_DESC[d.gogyoLayer]}</td></tr>
+      </table>
+    </div>
+
+    <div class="r-sec">
+      <p class="r-sec-label">03 — CONNECTION</p>
+      <p class="r-sec-title">軸の重なり。</p>
+      <div class="r-sec-body">
+        <p class="match-msg">${matchMsg}</p>
+        <div class="match-items">
+          ${matches.map(m=>`<div class="match-item"><span class="match-dot${m.hit?' hit':''}"></span><span>${m.label}${m.hit?'　←主方位と一致':''}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <p class="reveal-lead">— この方位と層の交点にいるのは —</p>
+
+    <div class="guardian">
+      <p class="guardian-label">YOUR GUARDIAN KAMI</p>
       <h2 class="guardian-name">${d.guardian.name}</h2>
       <p class="guardian-reading">${d.guardian.reading}</p>
-      <p class="guardian-source">${d.guardian.source}</p>
+      <p class="guardian-source">典拠：${d.guardian.source}</p>
       <p class="guardian-tagline">${d.guardian.tagline}</p>
-    </div>
-
-    <div class="gogyo-reason">
-      <span class="gogyo-badge">${d.gogyo}</span>
-      <p class="gogyo-text">${
-        d.gogyo === '水' ? `あなたは「水」の属性を持って生まれました。流れ・浸透・根源の力。${d.guardian.name}は、その水の気に呼ばれて、あなたのそばに現れています。` :
-        d.gogyo === '火' ? `あなたは「火」の属性を持って生まれました。情熱・変革・輝きの力。${d.guardian.name}は、その火の気に共鳴して、あなたを守るために動き始めています。` :
-        d.gogyo === '木' ? `あなたは「木」の属性を持って生まれました。成長・柔軟・生命力。${d.guardian.name}は、天へ伸びるその気を感じ、あなたのそばに来ています。` :
-        d.gogyo === '金' ? `あなたは「金」の属性を持って生まれました。鋭さ・純化・意志の力。${d.guardian.name}は、その研ぎ澄まされた気に引き寄せられ、あなたを守護しています。` :
-        `あなたは「土」の属性を持って生まれました。安定・受容・育みの力。${d.guardian.name}は、大地に根ざすその気に宿り、あなたのそばにいます。`
-      }</p>
-    </div>
-
-    <div class="three-layers">
-      <div class="layer-block">
-        <div class="layer-icon">🌱</div>
-        <div class="layer-type">生まれた地</div>
-        <div class="layer-place">${d.place1}</div>
-        <div class="layer-dir">${d.dir1}</div>
-        <div class="layer-deg">${d.deg1}°</div>
-      </div>
-      <div class="layer-block">
-        <div class="layer-icon">🏠</div>
-        <div class="layer-type">現在地</div>
-        <div class="layer-place">${d.place2||'—'}</div>
-        <div class="layer-dir">${d.dir2||'—'}</div>
-        <div class="layer-deg">${d.deg2 ? d.deg2+'°' : ''}</div>
-      </div>
-      <div class="layer-block">
-        <div class="layer-icon">✨</div>
-        <div class="layer-type">気になる地</div>
-        <div class="layer-place">${d.place3||'—'}</div>
-        <div class="layer-dir">${d.dir3||'—'}</div>
-        <div class="layer-deg">${d.deg3 ? d.deg3+'°' : ''}</div>
+      <div class="guardian-meta">
+        <span class="g-chip">方位 ${d.mainDir}</span>
+        <span class="g-chip">層 ${LAYER_NAMES[d.mainLayer].replace(/^[^ ]+ /,'')}</span>
+        <span class="g-chip">五行 ${d.gogyo}</span>
       </div>
     </div>
 
-    <div class="match-bar">
-      <p class="match-label">守護神との接続度</p>
-      <p style="font-size:13px;color:#2d6a35;font-weight:700;margin-bottom:12px;">${matchMsg}</p>
-      <div class="match-items">
-        ${matches.map(m=>`
-          <div class="match-item">
-            <div class="match-dot ${m.hit?'hit':'partial'}"></div>
-            <span>${m.label}${m.hit?' ✓':''}</span>
-          </div>
-        `).join('')}
+    <div class="r-sec">
+      <p class="r-sec-label">04 — WHO</p>
+      <p class="r-sec-title">この神について。</p>
+      <div class="r-sec-body">
+        ${d.guardian.detail}
+        ${d.soundMatch
+          ? `<br><br>お名前の音霊の方位（${d.soundDir}）も同じ方位を指しています。名前と土地が同じ神を示している——珍しい一致です。`
+          : `<br><br>お名前の音霊は${d.soundDir}方位を指しています。その方位の神（${KAMI_DATA[d.soundDir].ten.name}）も、あなたの縁の神のひとりです。`}
       </div>
-    </div>
-
-    <div class="detail-sections">
-      <div class="detail-sec">
-        <p class="detail-sec-label">守護神について</p>
-        <p class="detail-sec-text">${d.guardian.detail}</p>
-      </div>
-
-      <div class="detail-sec">
-        <p class="detail-sec-label">あなたの五行と層</p>
-        <p class="detail-sec-text">
-          生まれた年（${d.kan}年）の五行は<strong>「${d.gogyo}」</strong>です。
-          五行「${d.gogyo}」は${LAYER_NAMES[d.gogyoLayer]}の層に対応しています。
-          ${LAYER_DESC[d.gogyoLayer]}
-        </p>
-      </div>
-
-      <div class="detail-sec">
-        <p class="detail-sec-label">名前の音霊「${d.katakana}」</p>
-        <p class="detail-sec-text">
-          お名前の最初の音「${d.katakana}」は、カタカムナで「${SOUND_MEANINGS[d.katakana]}」を意味します。
-          この音霊は${d.soundDir}方位と対応しています。
-          ${d.soundMatch ? `生まれた地の方位（${d.dir1}）と一致しています——名前と土地が同じ神を示しています。` : `生まれた地の方位（${d.dir1}）とは異なりますが、音霊の神（${KAMI_DATA[d.soundDir]?.ten?.name}）もあなたの縁の神のひとりです。`}
-        </p>
-      </div>
-
-      ${d.aiResult ? `
-      <div class="detail-sec">
-        <p class="detail-sec-label">3つの土地が語ること</p>
-        <p class="detail-sec-text">
-          ${d.aiResult.born_reading || ''}
-          ${d.aiResult.now_reading && d.aiResult.now_reading !== 'null' ? '<br><br>'+d.aiResult.now_reading : ''}
-          ${d.aiResult.call_reading && d.aiResult.call_reading !== 'null' ? '<br><br>'+d.aiResult.call_reading : ''}
-        </p>
-      </div>
-
-      <div class="detail-sec">
-        <p class="detail-sec-label">統合メッセージ</p>
-        <p class="detail-sec-text">${d.aiResult.total_message || ''}</p>
-      </div>
-
-      <div class="detail-sec">
-        <p class="detail-sec-label">この守護神と繋がるために</p>
-        <p class="detail-sec-text">${d.aiResult.action || ''}</p>
-      </div>
-      ` : ''}
     </div>
 
     <div class="god-voice">
       <p class="god-voice-label">神からのことば</p>
-      <p class="god-voice-text">${voiceText.replace(/\n/g, '<br>')}</p>
+      <p class="god-voice-text">${voiceText.replace(/\n/g,'<br>')}</p>
     </div>
 
-    <button class="reset-btn" onclick="resetAll()">― もう一度鑑定する ―</button>
-  `;
+    <div class="cta">
+      <p class="cta-title">なぜこの神が、あなたなのか。</p>
+      <p class="cta-desc">無料鑑定はここまでです。住んできた土地の地形・地脈・歴史、名前の音霊、五行——すべてを統合した個別鑑定レポートでは、「なぜ」を深く読みます。</p>
+      <a href="https://coconala.com/services/4130557" class="btn-cta" target="_blank" rel="noopener">詳しい鑑定を依頼する</a>
+      <p class="cta-sub"><a href="amagi-48-shin.html">四十八神の全体像を読む →</a></p>
+    </div>
 
+    <button class="reset-btn" onclick="resetAll()">もう一度鑑定する</button>
+  `;
   res.classList.add('on');
   res.scrollIntoView({ behavior:'smooth', block:'start' });
 }
